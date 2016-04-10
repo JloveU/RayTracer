@@ -2,9 +2,11 @@
 #define PLANE_H
 
 
+#include <math.h>
 #include "Vector.h"
 #include "Geometry.h"
 #include "Ray.h"
+#include "MathConstant.h"
 
 
 // 平面
@@ -12,7 +14,7 @@ class Plane : public Geometry
 {
 
 public:
-    Plane(const Vec3f &point=Vec3f(0.0, 0.0, 0.0), const Vec3f &normal=Vec3f(0.0, 1.0, 0.0), const Vec3f &surfaceColor=Vec3f(1.0, 1.0, 1.0), const Vec3f &emissionColor = Vec3f(0.0, 0.0, 0.0), const float transparency = 0.0, const float reflection = 0.0);
+    Plane(const Vec3f &point = _defaultPoint, const Vec3f &normal = _defaultNormal, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
 
     inline const Vec3f & point() const
     {
@@ -24,12 +26,22 @@ public:
         return _normal;
     }
 
+    inline bool containsPoint(const Vec3f &point) const
+    {
+        return abs(_normal.dot(point) + _d) < EPS;
+    }
+
     virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
 
 private:
     Vec3f _point;  // 平面的显示方程中的点
     Vec3f _normal;  // 单位法向量
     float _d;  // 平面的隐式方程的常数项
+
+public:
+    // 各属性的默认值
+    static const Vec3f _defaultPoint;
+    static const Vec3f _defaultNormal;
 
 };
 

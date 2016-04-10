@@ -1,10 +1,10 @@
 #include "Camera.h"
 #include <iostream>
+#include <stdexcept>
 #include "Sphere.h"
+#include "MathConstant.h"
 
 
-const float PI = 3.141592653589;  // 圆周率
-const float INFINITY = 1e8;  // 最大数值
 const int MAX_DEPTH = 5;  // 最大递归次数
 
 

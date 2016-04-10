@@ -12,7 +12,7 @@ class Sphere : public Geometry
 {
 
 public:
-    Sphere(const Vec3f &center=Vec3f(0.0, 0.0, 0.0), const float radius=1, const Vec3f &surfaceColor=Vec3f(1.0, 1.0, 1.0), const Vec3f &emissionColor = Vec3f(0.0, 0.0, 0.0), const float transparency = 0.0, const float reflection = 0.0);
+    Sphere(const Vec3f &center = _defaultCenter, const float radius = _defaultRadius, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
 
     inline const Vec3f & center() const
     {
@@ -35,6 +35,11 @@ private:
     Vec3f _center;
     float _radius;
     float _radius2;  // 半径的平方
+
+public:
+    // 各属性的默认值
+    static const Vec3f _defaultCenter;
+    static const float _defaultRadius;
 
 };
 

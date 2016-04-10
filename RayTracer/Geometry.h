@@ -11,7 +11,7 @@ class Geometry
 {
 
 public:
-    Geometry(const Vec3f &surfaceColor=Vec3f(1.0, 1.0, 1.0), const Vec3f &emissionColor = Vec3f(0.0, 0.0, 0.0), const float transparency = 0.0, const float reflection = 0.0);
+    Geometry(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
 
     inline const Vec3f & surfaceColor() const
     {
@@ -44,6 +44,13 @@ private:
     Vec3f _emissionColor;  // 发光颜色
     float _transparency;  // 透明度
     float _reflection;  // 反射系数
+
+public:
+    // 各属性的默认值
+    static const Vec3f _defaultSurfaceColor;
+    static const Vec3f _defaultEmissionColor;
+    static const float _defaultTransparency;
+    static const float _defaultReflection;
 
 };
 

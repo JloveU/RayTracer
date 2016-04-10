@@ -12,7 +12,7 @@ class Scene
 {
 
 public:
-    Scene(const Vec3f &backgroundColor=Vec3f(1.0, 1.0, 1.0));
+    Scene(const Vec3f &backgroundColor = _defaultBackgroundColor);
 
     inline const Vec3f & backgroundColor() const
     {
@@ -33,6 +33,10 @@ public:
 private:
     Vec3f _backgroundColor;
     std::vector<Geometry *> _geometries;
+
+public:
+    // 各属性的默认值
+    static const Vec3f _defaultBackgroundColor;
 
 };
 

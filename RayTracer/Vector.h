@@ -99,12 +99,19 @@ public:
     inline T length() const
     {
         return sqrt(length2());
-    } 
+    }
+
     inline Vec3_<T> & normalize()
     {
         T norm = length();
         *this *= (norm ? 1.0/norm : 0.0);
         return *this;
+    }
+
+    // 计算由3个输入的列向量组成的3*3矩阵的行列式
+    inline static T det(const Vec3_<T> &v1, const Vec3_<T> &v2, const Vec3_<T> &v3)
+    {
+        return v1.x * (v2.y*v3.z-v2.z*v3.y) - v1.y * (v2.x*v3.z-v2.z*v3.x) + v1.z * (v2.x*v3.y-v2.y*v3.x);
     }
 
 //     friend std::ostream & operator << (std::ostream &os, const Vec3_<T> &v)
@@ -118,7 +125,107 @@ public:
 
 };
 
+
+// 二维向量类型
+template<typename T>
+class Vec2_
+{
+
+public:
+    Vec2_()
+        :x(T(0))
+        ,y(T(0))
+    {
+    }
+
+    Vec2_(T _x)
+        :x(_x)
+        ,y(_x)
+    {
+    }
+
+    Vec2_(T _x, T _y)
+        :x(_x)
+        ,y(_y)
+    {
+    }
+
+    inline Vec2_<T> operator + (const Vec2_<T> &v) const
+    {
+        return Vec2_<T>(x + v.x, y + v.y);
+    }
+
+    inline Vec2_<T> operator - (const Vec2_<T> &v) const
+    {
+        return Vec2_<T>(x - v.x, y - v.y);
+    }
+
+    inline Vec2_<T> operator * (const T v) const
+    {
+        return Vec2_<T>(x * v, y * v);
+    }
+
+    inline Vec2_<T> operator * (const Vec2_<T> &v) const
+    {
+        return Vec2_<T>(x * v.x, y * v.y);
+    }
+
+    inline T dot(const Vec2_<T> &v) const
+    {
+        return x * v.x + y * v.y;
+    }
+
+    inline Vec2_<T> & operator += (const Vec2_<T> &v)
+    {
+        x += v.x;
+        y += v.y;
+        return *this;
+    }
+
+    inline Vec2_<T> & operator *= (const T v)
+    {
+        x *= v;
+        y *= v;
+        return *this;
+    }
+
+    inline Vec2_<T> & operator *= (const Vec2_<T> &v)
+    {
+        x *= v.x;
+        y *= v.y;
+        return *this;
+    }
+
+    inline Vec2_<T> operator - () const
+    {
+        return Vec2_<T>(-x, -y);
+    }
+
+    inline T length2() const
+    {
+        return x * x + y * y;
+    }
+
+    inline T length() const
+    {
+        return sqrt(length2());
+    }
+
+    inline Vec2_<T> & normalize()
+    {
+        T norm = length();
+        *this *= (norm ? 1.0/norm : 0.0);
+        return *this;
+    }
+
+public:
+    T x, y;
+
+};
+
+
 typedef Vec3_<float> Vec3f;
+typedef Vec2_<float> Vec2f;
 
 
 #endif

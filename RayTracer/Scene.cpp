@@ -1,6 +1,9 @@
 #include "Scene.h"
 
 
+const Vec3f Scene::_defaultBackgroundColor = Vec3f(1.0, 1.0, 1.0);
+
+
 Scene::Scene(const Vec3f &backgroundColor)
     :_backgroundColor(backgroundColor)
     ,_geometries()

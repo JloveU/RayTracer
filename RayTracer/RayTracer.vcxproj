@@ -79,18 +79,23 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="MathConstant.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Polygon.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

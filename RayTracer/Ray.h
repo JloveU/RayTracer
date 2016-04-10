@@ -10,7 +10,7 @@ class Ray
 {
 
 public:
-    Ray(const Vec3f &origin=Vec3f(0.0, 0.0, 0.0), const Vec3f &direction=Vec3f(0.0, 0.0, -1.0));
+    Ray(const Vec3f &origin = _defaultOrigin, const Vec3f &direction = _defaultDirection);
 
     inline const Vec3f & origin() const
     {
@@ -31,6 +31,11 @@ public:
 private:
     Vec3f _origin;
     Vec3f _direction;
+
+public:
+    // 各属性的默认值
+    static const Vec3f _defaultOrigin;
+    static const Vec3f _defaultDirection;
 
 };
 
