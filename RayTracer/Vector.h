@@ -91,6 +91,11 @@ public:
         return Vec3_<T>(-x, -y, -z);
     }
 
+    inline bool operator == (const Vec3_<T> &v) const
+    {
+        return (x == v.x && y == v.y && z == v.z);
+    }
+
     inline T length2() const
     {
         return x * x + y * y + z * z;
@@ -121,7 +126,14 @@ public:
 //     }
 
 public:
-    T x, y, z;
+    union
+    {
+        struct
+        {
+            T x, y, z;
+        };
+        T val[3];
+    };
 
 };
 
@@ -201,6 +213,11 @@ public:
         return Vec2_<T>(-x, -y);
     }
 
+    inline bool operator == (const Vec2_<T> &v) const
+    {
+        return (x == v.x && y == v.y);
+    }
+
     inline T length2() const
     {
         return x * x + y * y;
@@ -219,7 +236,14 @@ public:
     }
 
 public:
-    T x, y;
+    union
+    {
+        struct
+        {
+            T x, y;
+        };
+        T val[2];
+    };
 
 };
 

@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include <stdexcept>
 #include <math.h>
 
 
@@ -12,6 +13,14 @@ Sphere::Sphere(const Vec3f &center, const float radius, const Vec3f &surfaceColo
     ,_radius(radius)
     ,_radius2(radius * radius)
 {
+    // °ë¾¶±ØĞë´óÓÚ0
+    if (radius <= 0)
+    {
+        throw std::runtime_error("Radius of Sphere must not be under or equal to 0!");
+    }
+
+    _radius = radius;
+    _radius2 = radius * radius;
 }
 
 

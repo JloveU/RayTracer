@@ -10,6 +10,7 @@
 #include "Plane.h"
 #include "Triangle.h"
 #include "Polygon.h"
+#include "Box.h"
 
 
 int main()
@@ -18,15 +19,9 @@ int main()
     Scene scene(Vec3f(1.0, 1.0, 1.0));
     // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
     float axesSize = 1.0;
-    const Vec3f _coordinatePlaneXYVertices[3] = {Vec3f(0.0, 0.0, 0.0), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0)};
-    const std::vector<Vec3f> coordinatePlaneXYVertices(_coordinatePlaneXYVertices, _coordinatePlaneXYVertices + 3);
-    scene.addGeometry(new Triangle(coordinatePlaneXYVertices, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    const Vec3f _coordinatePlaneYZVertices[3] = {Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(0.0, 0.0, axesSize)};
-    const std::vector<Vec3f> coordinatePlaneYZVertices(_coordinatePlaneYZVertices, _coordinatePlaneYZVertices + 3);
-    scene.addGeometry(new Triangle(coordinatePlaneYZVertices, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    const Vec3f _coordinatePlaneZXVertices[3] = {Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(axesSize, 0.0, 0.0)};
-    const std::vector<Vec3f> coordinatePlaneZXVertices(_coordinatePlaneZXVertices, _coordinatePlaneZXVertices + 3);
-    scene.addGeometry(new Triangle(coordinatePlaneZXVertices, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
     // 添加地面
     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.2, 0.2, 0.2), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
     // 添加球体
@@ -35,31 +30,31 @@ int main()
     scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
     scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
     // 添加三角形
-    const Vec3f _vertices1[3] = {Vec3f(-5.0, 2.0, -8.0), Vec3f(5.0, 2.0, -8.0), Vec3f(0.0, 10.66, -8.0)};
-    const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 3);
-    scene.addGeometry(new Triangle(vertices1, Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    scene.addGeometry(new Triangle(Vec3f(-5.0, 2.0, -8.0), Vec3f(5.0, 2.0, -8.0), Vec3f(0.0, 10.66, -8.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
     // 添加多边形
     const Vec3f _vertices2[5] = {Vec3f(-2.0, 0.0, -20.0), Vec3f(2.0, 0.0, -20.0), Vec3f(2.0, 2.0, -18.0), Vec3f(0.0, 4.0, -16.0), Vec3f(-2.0, 2.0, -18.0)};
     const std::vector<Vec3f> vertices2(_vertices2, _vertices2 + 5);
     scene.addGeometry(new Polygon(vertices2, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    // 添加长方体
+    scene.addGeometry(new Box(Vec3f(5.0, 2.0, -10.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
     // 添加光源
     scene.addGeometry(new Sphere(Vec3f(100.0, 200.0, 200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(3.0, 3.0, 3.0), 0.0, 0.0));
     scene.addGeometry(new Sphere(Vec3f(-100.0, 200.0, -200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0));
 
     // 相机
-    Camera camera(Vec3f(0.0, 0.0, 10.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 1280, 720);
+    Camera camera(Vec3f(0.0, 0.0, 10.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 640, 480);
 
     // 动画展示（不停地移动相机并且转动相机的朝向）
     // 动画中，场景中的所有几何体以及光源固定不动，只移动相机位置及指向
     // 相机运动规则为：在以(0,0,-20)为球心，40为半径的球体外表面上，xz平面做匀速圆周运动，同时在平行于y轴的各平面上并且在xz平面上方做反复匀速半圆周运动，相机始终指向球心(0,0,-20)，并且相机像面始终与相机指向垂直（由此可确定相机头顶指向）
-    float horizontalCircleRadius = 35;
+    float horizontalCircleRadius = 40;
     float horizontalCircleAlpha = 0.0;
-    float horizontalCircleSpeed = 1 * 3.14 / 180;
-    float verticalCircleRadius = 35;
+    float horizontalCircleSpeed = 5 * 3.14 / 180;
+    float verticalCircleRadius = 40;
     float verticalCircleAlpha = 0.0;
-    float verticalCircleSpeed = 2.5 * 3.14 / 180;
+    float verticalCircleSpeed = 2 * 3.14 / 180;
     bool verticalCircleSpeedPositive = true;
-    std::string videoFileName("animation2.avi");
+    std::string videoFileName("animationTemp.avi");
     cv::VideoWriter videoWriter(videoFileName, CV_FOURCC('M', 'J', 'P', 'G'), 20, camera.image().size(), true);
     clock_t processStartTime = clock();  // 整个动画开始时间（clock()函数返回从程序开始运行到现在的毫秒数）
     clock_t processEndTime = processStartTime;  // 整个动画结束时间

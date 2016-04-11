@@ -2,19 +2,21 @@
 #include <stdexcept>
 
 
-const Vec3f __defaultVertices[3] = {Vec3f(-1.0, 0.0, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 1.732, 0.0)};
-const std::vector<Vec3f> Triangle::_defaultVertices(__defaultVertices, __defaultVertices + 3);
+const Vec3f Triangle::_defaultVertices[3] = {Vec3f(-1.0, 0.0, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 1.732, 0.0)};
 
 
-Triangle::Triangle(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
+Triangle::Triangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vertex2, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
     :Geometry(surfaceColor, emissionColor, transparency, reflection)
-    ,_vertices(vertices)
 {
-    // 顶点数量必须为3
-    if (vertices.size() != 3)
+    // 任何两个顶点不能重合
+    if (vertex0 == vertex1 || vertex1 == vertex2 || vertex2 == vertex0)
     {
-        throw std::runtime_error("Number of Triangle's vertices must not be any value but 3!");
+        throw std::runtime_error("There should not be two vertices in a Triangle which have same coordinates!");
     }
+
+    _vertices[0] = vertex0;
+    _vertices[1] = vertex1;
+    _vertices[2] = vertex2;
 
     // 计算两条边和单位法向量
     _edge1 = _vertices[0] - _vertices[1];

@@ -10,14 +10,40 @@ const int MAX_DEPTH = 5;  // 最大递归次数
 
 Camera::Camera(const Vec3f &viewPoint, const Vec3f &viewDirection, const Vec3f &headDirection, const float verticalFOV, const float distanceFromEye2Image, const unsigned imageWidth, const unsigned imageHeight)
     :_viewPoint(viewPoint)
-    ,_viewDirection(viewDirection * (1.0 / viewDirection.length()))
-    ,_headDirection(headDirection * (1.0 / headDirection.length()))
-    ,_verticalFOV(verticalFOV)
-    ,_distanceFromEye2Image(distanceFromEye2Image)
-    ,_imageWidth(imageWidth)
-    ,_imageHeight(imageHeight)
-    ,_image(cv::Mat(imageHeight, imageWidth, CV_8UC3))
 {
+    // 方向向量的长度必须大于0
+    if (viewDirection.length2() == 0 || headDirection.length2() == 0)
+    {
+        throw std::runtime_error("Norm of direction must not be equal to 0!");
+    }
+
+    // 视野角必须大于0小于90
+    if (verticalFOV <= 0 || verticalFOV >= 90)
+    {
+        throw std::runtime_error("FOV must not be under 0 or above 90!");
+    }
+
+    // 眼睛到像面的距离必须大于0
+    if (verticalFOV <= 0 || verticalFOV >= 90)
+    {
+        throw std::runtime_error("Distance from eye to image must not be under or equal to 0!");
+    }
+
+    // 图像尺寸必须大于0
+    if (imageWidth <= 0 || imageHeight <= 0)
+    {
+        throw std::runtime_error("Size of image must not be under or equal to 0!");
+    }
+
+    _viewDirection = viewDirection;
+    _viewDirection.normalize();
+    _headDirection = headDirection;
+    _headDirection.normalize();
+    _verticalFOV = verticalFOV;
+    _distanceFromEye2Image = distanceFromEye2Image;
+    _imageWidth = imageWidth;
+    _imageHeight = imageHeight;
+    _image = cv::Mat(imageHeight, imageWidth, CV_8UC3);
 }
 
 

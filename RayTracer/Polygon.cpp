@@ -13,7 +13,7 @@ Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, 
     // 顶点数量必须大于3
     if (vertices.size() < 4)
     {
-        throw std::runtime_error("Number of Polygon's vertices must not be any value under 4!");
+        throw std::runtime_error("Number of vertices in a Polygon must not be any value under 4!");
     }
 
     // 计算单位法向量

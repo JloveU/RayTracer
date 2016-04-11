@@ -1,13 +1,20 @@
 #include "Scene.h"
+#include <stdexcept>
 
 
 const Vec3f Scene::_defaultBackgroundColor = Vec3f(1.0, 1.0, 1.0);
 
 
 Scene::Scene(const Vec3f &backgroundColor)
-    :_backgroundColor(backgroundColor)
-    ,_geometries()
+    :_geometries()
 {
+    // 颜色值必须大于等于0
+    if (backgroundColor.x < 0 || backgroundColor.y < 0 || backgroundColor.z < 0)
+    {
+        throw std::runtime_error("Value of color must not be under 0!");
+    }
+
+    _backgroundColor = backgroundColor;
 }
 
 
