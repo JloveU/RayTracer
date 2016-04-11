@@ -11,6 +11,7 @@
 #include "Triangle.h"
 #include "Polygon.h"
 #include "Box.h"
+#include "GeometryUnion.h"
 
 
 int main()
@@ -18,25 +19,30 @@ int main()
     // 场景
     Scene scene(Vec3f(1.0, 1.0, 1.0));
     // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
-    float axesSize = 1.0;
-    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    scene.addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    // 添加地面
+    scene.addAxes();
+    // 添加地面（无限平面）
     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.2, 0.2, 0.2), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
     // 添加球体
-    scene.addGeometry(new Sphere(Vec3f(0.0, 0.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
-    scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
-    scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
-    scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.5));
+    scene.addGeometry(new Sphere(Vec3f(0.0, 0.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
     // 添加三角形
     scene.addGeometry(new Triangle(Vec3f(-5.0, 2.0, -8.0), Vec3f(5.0, 2.0, -8.0), Vec3f(0.0, 10.66, -8.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-    // 添加多边形
-    const Vec3f _vertices2[5] = {Vec3f(-2.0, 0.0, -20.0), Vec3f(2.0, 0.0, -20.0), Vec3f(2.0, 2.0, -18.0), Vec3f(0.0, 4.0, -16.0), Vec3f(-2.0, 2.0, -18.0)};
-    const std::vector<Vec3f> vertices2(_vertices2, _vertices2 + 5);
+    // 添加五边形（多边形）
+    const Vec3f _vertices1[5] = {Vec3f(-2.0, 0.0, -20.0), Vec3f(2.0, 0.0, -20.0), Vec3f(2.0, 2.0, -18.0), Vec3f(0.0, 4.0, -16.0), Vec3f(-2.0, 2.0, -18.0)};
+    const std::vector<Vec3f> vertices2(_vertices1, _vertices1 + 5);
     scene.addGeometry(new Polygon(vertices2, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
     // 添加长方体
-    scene.addGeometry(new Box(Vec3f(5.0, 2.0, -10.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    scene.addGeometry(new Box(Vec3f(5.0, 2.0, -10.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    // 添加四面体（组合几何图形）
+    GeometryUnion *geometryUnion1 = new GeometryUnion(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
+    float geometryUnion1Size = 5;
+    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, -13.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, -13.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, -13.0)));
+    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, -13.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, -13.0), Vec3f(-8.0, 3.0, -13.0 + geometryUnion1Size)));
+    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, -13.0), Vec3f(-8.0, 3.0, -13.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, -13.0)));
+    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, -13.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, -13.0), Vec3f(-8.0, 3.0, -13.0 + geometryUnion1Size)));
+    scene.addGeometry(geometryUnion1);
     // 添加光源
     scene.addGeometry(new Sphere(Vec3f(100.0, 200.0, 200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(3.0, 3.0, 3.0), 0.0, 0.0));
     scene.addGeometry(new Sphere(Vec3f(-100.0, 200.0, -200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0));

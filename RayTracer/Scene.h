@@ -30,6 +30,9 @@ public:
     // 删除场景中的所有几何图形
     void removeAllGeometries();
 
+    // 添加坐标系标志到场景中
+    void addAxes();
+
 private:
     Vec3f _backgroundColor;
     std::vector<Geometry *> _geometries;

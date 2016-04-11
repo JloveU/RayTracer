@@ -145,7 +145,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
                         throw std::runtime_error("Light must not be Geometry which is not Sphere!");
                     }
 
-                    float transmission = 1.0;
+                    Vec3f transmission(1.0, 1.0, 1.0);
                     Vec3f lightDirection = light->center() - intersectionPoint;
                     lightDirection.normalize();
 
@@ -156,8 +156,8 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
                         {
                             if(geometries[j]->intersect(Ray(intersectionPoint + intersectionNormal * bias, lightDirection)) > 0)
                             {
-                                transmission = 0.0;
-                                break;
+                                // 若有几何图形遮挡并且该几何图形透明，则根据透明度计算透射系数
+                                transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();
                             }                        
                         }
                     }                
