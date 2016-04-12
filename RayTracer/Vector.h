@@ -250,6 +250,7 @@ public:
 
 typedef Vec3_<float> Vec3f;
 typedef Vec2_<float> Vec2f;
+typedef Vec3_<int> Vec3i;
 
 
 #endif

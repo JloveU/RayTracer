@@ -28,7 +28,7 @@ void GeometryUnion::removeAllGeometries()
 float GeometryUnion::intersect(const Ray &ray, Vec3f &normal) const
 {
     // 分别计算每一个子几何图形与光线的交点，取最近的那一个
-    float tNearest, tTemp;
+    float tNearest = -1, tTemp;
     Vec3f normalNearest, normalTemp;
 
     // 按子几何图形添加顺序找到1个与光线相交的子几何图形

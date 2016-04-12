@@ -80,6 +80,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GeometryUnion.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Ray.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="GeometryUnion.h" />
     <ClInclude Include="MathConstant.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Ray.h" />

@@ -246,6 +246,7 @@ _Pvt_Extensions
 .idea/
 *.sln.iml
 
-# Output images - by YU Qiang on 2016-04-10
+# Output images - by YU Qiang
 *.png
 *.avi
+*.log

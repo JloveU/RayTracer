@@ -28,7 +28,7 @@ public:
 
     virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
 
-private:
+protected:
     std::vector<Geometry *> _geometries;
 
 };
