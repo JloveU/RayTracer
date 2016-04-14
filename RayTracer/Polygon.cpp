@@ -35,10 +35,10 @@ Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, 
 }
 
 
-float Polygon::intersect(const Ray &ray, Vec3f &normal) const
+float Polygon::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     // 首先计算光线与多边形所在平面是否有交点
-    float t = _plane.intersect(ray, normal);
+    float t = _plane.intersect(ray);
     if (t > 0)  // 如果有交点的话，判断交点是否在多边形内部
     {
         // 将所有顶点投影到二维平面（同时将坐标原点平移到该多边形所在平面与光线的交点处）
@@ -110,6 +110,7 @@ float Polygon::intersect(const Ray &ray, Vec3f &normal) const
         if ((int)crossCount % 2 == 1)  // 如果交点数为奇数，则交点在多边形内部
         {
             normal = _normal;
+            color = surfaceColor();  // TODO 处理纹理
             return t;
         }
         else

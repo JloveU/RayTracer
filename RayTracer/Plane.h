@@ -31,7 +31,7 @@ public:
         return abs(_normal.dot(point) + _d) < EPS;
     }
 
-    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
+    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 
 private:
     Vec3f _point;  // 平面的显示方程中的点

@@ -26,7 +26,7 @@ public:
         return _normal;
     }
 
-    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
+    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 
 private:
     std::vector<Vec3f> _vertices;  // 所有顶点（按逆时针方向确定正面）

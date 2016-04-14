@@ -22,12 +22,13 @@ Plane::Plane(const Vec3f &point, const Vec3f &normal, const Vec3f &surfaceColor,
 }
 
 
-float Plane::intersect(const Ray &ray, Vec3f &normal) const
+float Plane::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     float t = (-1) * (_d + _normal.dot(ray.origin())) / (_normal.dot(ray.direction()));
     if (t > 0)
     {
         normal = _normal;
+        color = surfaceColor();  // TODO ¥¶¿ÌŒ∆¿Ì
         return t;
     }
     else

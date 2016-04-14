@@ -17,7 +17,7 @@ public:
 
     // 读取obj模型文件
     // 正确读取完毕返回0，出错返回-1
-    int loadObj(const std::string filename);
+    int loadObj(const std::string &filename);
 
 };
 

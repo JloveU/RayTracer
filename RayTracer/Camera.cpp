@@ -60,15 +60,18 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
 
     Vec3f intersectionNormal(0.0, 0.0, 0.0);  // 光线与第1个遇到的几何体的交点处的法向量
     Vec3f intersectionNormalTemp(0.0, 0.0, 0.0);
+    Vec3f intersectionColor(0.0, 0.0, 0.0);  // 光线与第1个遇到的几何体的交点处的颜色
+    Vec3f intersectionColorTemp(0.0, 0.0, 0.0);
 
     // 计算第1个遇到的几何体
     for(unsigned i = 0; i < geometries.size(); i++)
     {
-        float t = geometries[i]->intersect(ray, intersectionNormalTemp);
+        float t = geometries[i]->intersect(ray, intersectionNormalTemp, intersectionColorTemp);
         if(t > 0 && t < tNearest)
         {
             tNearest = t;
             intersectionNormal = intersectionNormalTemp;
+            intersectionColor = intersectionColorTemp;
             geometry = geometries[i];
         }
     }
@@ -122,7 +125,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
         }
 
         // 光线颜色是反射光线和折射光线的贡献总和
-        surfaceColor = (nextReflection * fresnelEffect + nextRefraction * (1 - fresnelEffect) * geometry->transparency()) * geometry->surfaceColor();
+        surfaceColor = (nextReflection * fresnelEffect + nextRefraction * (1 - fresnelEffect) * geometry->transparency()) * intersectionColor;
     }
     else  // 如果该几何体表面是漫反射材质或是光源，则不需要继续跟踪光线
     {
@@ -157,13 +160,13 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
                             if(geometries[j]->intersect(Ray(intersectionPoint + intersectionNormal * bias, lightDirection)) > 0)
                             {
                                 // 若有几何图形遮挡并且该几何图形透明，则根据透明度计算透射系数
-                                transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();
+                                transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();  // 因为不允许在透明几何图形上贴纹理，所以此处直接用几何图形的表面颜色属性
                             }                        
                         }
                     }                
 
                     // 如果光源在交点处的背面，则该光源在此处光照为0
-                    surfaceColor += geometry->surfaceColor() * transmission * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometries[i]->emissionColor();
+                    surfaceColor += intersectionColor * transmission * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometries[i]->emissionColor();
                 }
             }
         }
@@ -195,9 +198,10 @@ const cv::Mat & Camera::render(const Scene &scene)
             Vec3f pixelCoordinate = _viewPoint + _viewDirection * _distanceFromEye2Image + xx + yy;  // 该像素点的真实三维坐标
 
             Vec3f pixel = trace(Ray(_viewPoint, pixelCoordinate - _viewPoint), scene, 0);
-            _image.at<cv::Vec3b>(row, col)[0] = (unsigned char)(std::min(float(1), pixel.z) * 255);
-            _image.at<cv::Vec3b>(row, col)[1] = (unsigned char)(std::min(float(1), pixel.y) * 255);
-            _image.at<cv::Vec3b>(row, col)[2] = (unsigned char)(std::min(float(1), pixel.x) * 255);
+            for (unsigned i = 0; i < 3; i++)
+            {
+                _image.at<cv::Vec3b>(row, col)[i] = (unsigned char)(std::min(float(1), pixel.val[2 - i]) * 255);
+            }
         }
     }
 

@@ -32,4 +32,6 @@ Geometry::Geometry(const Vec3f &surfaceColor, const Vec3f &emissionColor, const 
     _emissionColor = emissionColor;
     _transparency = transparency;
     _reflection = reflection;
+
+    _textureFileName.clear();
 }

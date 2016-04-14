@@ -42,10 +42,47 @@ std::vector<std::string> stringSplit(const std::string &string, const std::strin
 }
 
 
-int Mesh::loadObj(const std::string filename)
+// 从.mtl文件中读取纹理图片文件名
+std::string getTextureFileName(const std::string &objFileName, const std::string &materialName)
+{
+    const std::string mtlFileName = objFileName + ".mtl";
+
+    std::ifstream in(mtlFileName);
+    if(!in.is_open())
+    {
+        std::cout << "ERROR: Failed to open mtl file:(" << mtlFileName << ")" << std::endl;
+        return "";
+    }
+
+    std::string bufferLine;
+    while(!in.eof())
+    {
+        std::getline(in, bufferLine);
+        std::vector<std::string> bufferLineSplit = stringSplit(bufferLine, " ");
+
+        if (bufferLineSplit[0] == "newmtl" && bufferLineSplit[1] == materialName)
+        {
+            while(!in.eof())
+            {
+                std::getline(in, bufferLine);
+                std::vector<std::string> bufferLineSplit = stringSplit(bufferLine, " ");
+                if (bufferLineSplit[0] == "map_Kd")
+                {
+                    return bufferLineSplit[1];
+                }
+            }
+            return "";
+        }
+    }
+}
+
+
+int Mesh::loadObj(const std::string &fileName)
 {
     std::vector<Vec3f> vertices;
-    std::vector<Vec3i> faces;
+    std::vector<Vec2f> textureCoordinates;
+    std::vector<Vec3i> facesVertices;
+    std::vector<Vec3i> facesTextureCoordinates;
     // 模型的包围盒
     Vec3f boundingBoxOrigin;
     Vec3f boundingBoxSize;
@@ -54,15 +91,17 @@ int Mesh::loadObj(const std::string filename)
     float boundingSphereRadius;
 
     // 打开obj文件
-    std::ifstream in(filename);
+    std::ifstream in(fileName);
     if(!in.is_open())
     {
-        std::cout << "ERROR: Failed to open obj file:(" << filename << ")" << std::endl;
+        std::cout << "ERROR: Failed to open obj file:(" << fileName << ")" << std::endl;
         return -1;
     }
 
     // 逐行读取顶点或三角面片信息
     std::string bufferLine;
+    std::string textureFileName;
+    std::string currentPath = fileName.substr(0, fileName.find_last_of("/") + 1);
     while(!in.eof())
     {
         std::getline(in, bufferLine);
@@ -77,6 +116,24 @@ int Mesh::loadObj(const std::string filename)
             }
             vertices.push_back(Vec3f(atof(bufferLineSplit[1].c_str()), atof(bufferLineSplit[2].c_str()), atof(bufferLineSplit[3].c_str())));
         }
+        else if (bufferLineSplit[0] == "usemtl")  // 使用材料（即纹理图片文件）
+        {
+            if (bufferLineSplit.size() != 2)
+            {
+                std::cout << "ERROR: \"usemtl\" not in wanted format in obj file." << std::endl;
+                return -1;
+            }
+            textureFileName = getTextureFileName(fileName, bufferLineSplit[1]);
+        }
+        else if (bufferLineSplit[0] == "vt")  // 顶点的纹理坐标
+        {
+            if (bufferLineSplit.size() != 3)
+            {
+                std::cout << "ERROR: Texture coordinate not in wanted format in obj file." << std::endl;
+                return -1;
+            }
+            textureCoordinates.push_back(Vec2f(atof(bufferLineSplit[1].c_str()), 1 - atof(bufferLineSplit[2].c_str())));  // 纹理坐标的第2个分量用1减去的原因是左手系统
+        }
         else if (bufferLineSplit[0] == "f")  // 三角面片
         {
             if (bufferLineSplit.size() != 4)
@@ -84,24 +141,30 @@ int Mesh::loadObj(const std::string filename)
                 std::cout << "ERROR: Face not in wanted format in obj file." << std::endl;
                 return -1;
             }
-            Vec3i face;
+
+            Vec3i faceVertices;
             for (unsigned i = 0; i < 3; i++)
             {
-                face.val[i] = atoi(stringSplit(bufferLineSplit[i + 1], "/")[0].c_str());
+                std::vector<std::string> bufferLineSplitSplit = stringSplit(bufferLineSplit[i + 1], "/");
+                faceVertices.val[i] = atoi(bufferLineSplitSplit[0].c_str());
             }
-            faces.push_back(face);
-        }
-    }
+            facesVertices.push_back(faceVertices);
+            Triangle *triangle = new Triangle(vertices[faceVertices.val[0] - 1], vertices[faceVertices.val[1] - 1], vertices[faceVertices.val[2] - 1]);
 
-    // 将所有三角面片加入_geometries
-    for (unsigned i = 0; i < faces.size(); i++)
-    {
-        unsigned vertexIndices[3];
-        for (unsigned j = 0; j < 3; j++)
-        {
-            vertexIndices[j] = faces[i].val[j] - 1;
+            if (stringSplit(bufferLineSplit[1], "/").size() > 1)  // 有纹理坐标
+            {
+                Vec3i faceTextureCoordinates;
+                for (unsigned i = 0; i < 3; i++)
+                {
+                    std::vector<std::string> bufferLineSplitSplit = stringSplit(bufferLineSplit[i + 1], "/");
+                    faceTextureCoordinates.val[i] = atoi(bufferLineSplitSplit[1].c_str());
+                }
+                facesTextureCoordinates.push_back(faceTextureCoordinates);
+                triangle->setTextureFileName(currentPath + textureFileName);
+                triangle->setTextureCoordinates(textureCoordinates[faceTextureCoordinates.val[0] - 1], textureCoordinates[faceTextureCoordinates.val[1] - 1], textureCoordinates[faceTextureCoordinates.val[2] - 1]);
+            }
+            addGeometry(triangle);
         }
-        addGeometry(new Triangle(Vec3f(vertices[vertexIndices[0]].x, vertices[vertexIndices[0]].y, vertices[vertexIndices[0]].z), Vec3f(vertices[vertexIndices[1]].x, vertices[vertexIndices[1]].y, vertices[vertexIndices[1]].z), Vec3f(vertices[vertexIndices[2]].x, vertices[vertexIndices[2]].y, vertices[vertexIndices[2]].z)));
     }
 
     float xmin, ymin, zmin, xmax, ymax, zmax;
@@ -218,7 +281,7 @@ int Mesh::loadObj(const std::string filename)
     boundingSphereRadius = radius;
 
     std::cout << "----------obj file loaded-------------" << std::endl;
-    std::cout << "number of faces:" << faces.size() << std::endl;
+    std::cout << "number of faces:" << facesVertices.size() << std::endl;
     std::cout << "number of vertices:" << vertices.size() << std::endl;
     std::cout << "obj bounding box: min:("
         << boundingBoxOrigin.x << "," << boundingBoxOrigin.y << "," << boundingBoxOrigin.z << ") max:("

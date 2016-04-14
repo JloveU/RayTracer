@@ -24,7 +24,7 @@ Sphere::Sphere(const Vec3f &center, const float radius, const Vec3f &surfaceColo
 }
 
 
-float Sphere::intersect(const Ray &ray, Vec3f &normal) const
+float Sphere::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     // 用几何方法求光线与球体的交点
     Vec3f vectorRayOrigin2SphereCenter = _center - ray.origin();  //从光线原点到球心的向量
@@ -38,6 +38,7 @@ float Sphere::intersect(const Ray &ray, Vec3f &normal) const
             float chordLengthHalf = sqrt(_radius2 - distance2);  // 相交弦半长度
             float t = projectionLength - chordLengthHalf;
             normal = (ray.pointAt(t) - _center).normalize();
+            color = surfaceColor();  // TODO 处理纹理
             return t;
         } 
         else  // 无交点
@@ -52,6 +53,7 @@ float Sphere::intersect(const Ray &ray, Vec3f &normal) const
         float chordLengthHalf = sqrt(_radius2 - distance2);  // 相交弦半长度
         float t = projectionLength + chordLengthHalf;
         normal = (ray.pointAt(t) - _center).normalize();
+        color = surfaceColor();  // TODO 处理纹理
         return t;
     }
 }

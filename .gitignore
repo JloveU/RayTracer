@@ -247,6 +247,5 @@ _Pvt_Extensions
 *.sln.iml
 
 # Output images - by YU Qiang
-*.png
-*.avi
-*.log
+/RayTracer/Models/*
+/RayTracer/RenderResults/*

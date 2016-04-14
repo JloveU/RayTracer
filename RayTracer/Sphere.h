@@ -29,7 +29,7 @@ public:
         return _radius2;
     }
 
-    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
+    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 
 private:
     Vec3f _center;

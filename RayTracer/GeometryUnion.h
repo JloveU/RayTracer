@@ -26,7 +26,7 @@ public:
     // 删除所有几何图形
     void removeAllGeometries();
 
-    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f()) const;
+    virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 
 protected:
     std::vector<Geometry *> _geometries;

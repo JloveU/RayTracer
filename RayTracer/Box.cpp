@@ -34,7 +34,7 @@ Box::Box(const Vec3f &origin, const Vec3f &size, const Vec3f &surfaceColor, cons
 }
 
 
-float Box::intersect(const Ray &ray, Vec3f &normal) const
+float Box::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     // 用基于Slab的长方体求交算法计算长方体与光线的交点
     // 分别计算3个slab与光线的交点
@@ -71,6 +71,7 @@ float Box::intersect(const Ray &ray, Vec3f &normal) const
     if (tMinMax < tMaxMin)  // 如果最近点比最远点近，则长方体与光线有交点
     {
         normal = normals[nearestSlabIndex];
+        color = surfaceColor();  // TODO 处理纹理
         return tMinMax;
     }
     else
