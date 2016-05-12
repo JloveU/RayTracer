@@ -37,7 +37,8 @@ float Sphere::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         {
             float chordLengthHalf = sqrt(_radius2 - distance2);  // 相交弦半长度
             float t = projectionLength - chordLengthHalf;
-            normal = (ray.pointAt(t) - _center).normalize();
+            normal = ray.pointAt(t) - _center;
+            normal.normalize();
             color = surfaceColor();  // TODO 处理纹理
             return t;
         } 
@@ -52,7 +53,8 @@ float Sphere::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         float distance2 = vectorRayOrigin2SphereCenter.dot(vectorRayOrigin2SphereCenter) - projectionLength * projectionLength;  // 球心到光线的距离
         float chordLengthHalf = sqrt(_radius2 - distance2);  // 相交弦半长度
         float t = projectionLength + chordLengthHalf;
-        normal = (ray.pointAt(t) - _center).normalize();
+        normal = ray.pointAt(t) - _center;
+        normal.normalize();
         color = surfaceColor();  // TODO 处理纹理
         return t;
     }

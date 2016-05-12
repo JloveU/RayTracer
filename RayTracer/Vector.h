@@ -32,32 +32,33 @@ public:
     {
     }
 
-    inline Vec3_<T> operator + (const Vec3_<T> &v) const
+    // 将操作符方法的返回类型声明为const，是为了防止出现“if ((a + b) = c)”中误把“==”写成“=”的错误
+    inline const Vec3_<T> operator + (const Vec3_<T> &v) const
     {
         return Vec3_<T>(x + v.x, y + v.y, z + v.z);
     }
 
-    inline Vec3_<T> operator - (const Vec3_<T> &v) const
+    inline const Vec3_<T> operator - (const Vec3_<T> &v) const
     {
         return Vec3_<T>(x - v.x, y - v.y, z - v.z);
     }
 
-    inline Vec3_<T> operator * (const T v) const
+    inline const Vec3_<T> operator * (const T v) const
     {
         return Vec3_<T>(x * v, y * v, z * v);
     }
 
-    inline Vec3_<T> operator * (const Vec3_<T> &v) const
+    inline const Vec3_<T> operator * (const Vec3_<T> &v) const
     {
         return Vec3_<T>(x * v.x, y * v.y, z * v.z);
     }
 
-    inline T dot(const Vec3_<T> &v) const
+    inline const T dot(const Vec3_<T> &v) const
     {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    inline Vec3_<T> cross(const Vec3_<T> &v) const
+    inline const Vec3_<T> cross(const Vec3_<T> &v) const
     {
         return Vec3_<T>(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
@@ -86,22 +87,22 @@ public:
         return *this;
     }
 
-    inline Vec3_<T> operator - () const
+    inline const Vec3_<T> operator - () const
     {
         return Vec3_<T>(-x, -y, -z);
     }
 
-    inline bool operator == (const Vec3_<T> &v) const
+    inline const bool operator == (const Vec3_<T> &v) const
     {
         return (x == v.x && y == v.y && z == v.z);
     }
 
-    inline T length2() const
+    inline const T length2() const
     {
         return x * x + y * y + z * z;
     }
 
-    inline T length() const
+    inline const T length() const
     {
         return sqrt(length2());
     }
@@ -114,7 +115,7 @@ public:
     }
 
     // 计算由3个输入的列向量组成的3*3矩阵的行列式
-    inline static T det(const Vec3_<T> &v1, const Vec3_<T> &v2, const Vec3_<T> &v3)
+    inline static const T det(const Vec3_<T> &v1, const Vec3_<T> &v2, const Vec3_<T> &v3)
     {
         return v1.x * (v2.y*v3.z-v2.z*v3.y) - v1.y * (v2.x*v3.z-v2.z*v3.x) + v1.z * (v2.x*v3.y-v2.y*v3.x);
     }
@@ -162,27 +163,27 @@ public:
     {
     }
 
-    inline Vec2_<T> operator + (const Vec2_<T> &v) const
+    inline const Vec2_<T> operator + (const Vec2_<T> &v) const
     {
         return Vec2_<T>(x + v.x, y + v.y);
     }
 
-    inline Vec2_<T> operator - (const Vec2_<T> &v) const
+    inline const Vec2_<T> operator - (const Vec2_<T> &v) const
     {
         return Vec2_<T>(x - v.x, y - v.y);
     }
 
-    inline Vec2_<T> operator * (const T v) const
+    inline const Vec2_<T> operator * (const T v) const
     {
         return Vec2_<T>(x * v, y * v);
     }
 
-    inline Vec2_<T> operator * (const Vec2_<T> &v) const
+    inline const Vec2_<T> operator * (const Vec2_<T> &v) const
     {
         return Vec2_<T>(x * v.x, y * v.y);
     }
 
-    inline T dot(const Vec2_<T> &v) const
+    inline const T dot(const Vec2_<T> &v) const
     {
         return x * v.x + y * v.y;
     }
@@ -208,22 +209,22 @@ public:
         return *this;
     }
 
-    inline Vec2_<T> operator - () const
+    inline const Vec2_<T> operator - () const
     {
         return Vec2_<T>(-x, -y);
     }
 
-    inline bool operator == (const Vec2_<T> &v) const
+    inline const bool operator == (const Vec2_<T> &v) const
     {
         return (x == v.x && y == v.y);
     }
 
-    inline T length2() const
+    inline const T length2() const
     {
         return x * x + y * y;
     }
 
-    inline T length() const
+    inline const T length() const
     {
         return sqrt(length2());
     }

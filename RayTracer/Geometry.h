@@ -14,6 +14,9 @@ class Geometry
 public:
     Geometry(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
 
+    // 实现多态用途的父类必须有纯虚析构函数（但必须有定义(在.cpp文件中)，否则会链接出错）,否则会存在内存泄漏
+    virtual ~Geometry() = 0;
+
     inline const Vec3f & surfaceColor() const
     {
         return _surfaceColor;

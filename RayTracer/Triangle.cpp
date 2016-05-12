@@ -22,7 +22,8 @@ Triangle::Triangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vert
     // 计算两条边和单位法向量
     _edge1 = _vertices[0] - _vertices[1];
     _edge2 = _vertices[0] - _vertices[2];
-    _normal = (_edge1.cross(_edge2)).normalize();
+    _normal = _edge1.cross(_edge2);
+    _normal.normalize();
 }
 
 

@@ -35,3 +35,7 @@ Geometry::Geometry(const Vec3f &surfaceColor, const Vec3f &emissionColor, const 
 
     _textureFileName.clear();
 }
+
+Geometry::~Geometry()
+{
+}

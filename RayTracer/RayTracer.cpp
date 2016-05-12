@@ -21,14 +21,14 @@ int main()
     // 场景
     Scene scene(Vec3f(1.0, 1.0, 1.0));
     // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
-//     scene.addAxes();
-//     // 添加地面（无限平面）
-//     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.2, 0.2, 0.2), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-//     // 添加球体
-//     scene.addGeometry(new Sphere(Vec3f(0.0, 0.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 0.2));
-//     scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
-//     scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
-//     scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    scene.addAxes();
+    // 添加地面（无限平面）
+    scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.2, 0.2, 0.2), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    // 添加球体
+    scene.addGeometry(new Sphere(Vec3f(0.0, 0.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
 //     // 添加三角形
 //     scene.addGeometry(new Triangle(Vec3f(-5.0, 2.0, -8.0), Vec3f(5.0, 2.0, -8.0), Vec3f(0.0, 10.66, -8.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
 //     // 添加五边形（多边形）
@@ -45,10 +45,10 @@ int main()
 //     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, -13.0), Vec3f(-8.0, 3.0, -13.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, -13.0)));
 //     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, -13.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, -13.0), Vec3f(-8.0, 3.0, -13.0 + geometryUnion1Size)));
 //     scene.addGeometry(geometryUnion1);
-    // 添加Mesh
-    Mesh *mesh1 = new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
-    mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
-    scene.addGeometry(mesh1);
+//     // 添加Mesh
+//     Mesh *mesh1 = new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
+//     mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
+//     scene.addGeometry(mesh1);
     // 添加光源
     scene.addGeometry(new Sphere(Vec3f(100.0, 200.0, 200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(3.0, 3.0, 3.0), 0.0, 0.0));
     scene.addGeometry(new Sphere(Vec3f(-100.0, 200.0, -200.0), 30.0, Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0));
@@ -59,12 +59,14 @@ int main()
     // 动画展示（不停地移动相机并且转动相机的朝向）
     // 动画中，场景中的所有几何体以及光源固定不动，只移动相机位置及指向
     // 相机运动规则为：在以(0,0,-20)为球心，40为半径的球体外表面上，xz平面做匀速圆周运动，同时在平行于y轴的各平面上并且在xz平面上方做反复匀速半圆周运动，相机始终指向球心(0,0,-20)，并且相机像面始终与相机指向垂直（由此可确定相机头顶指向）
-//     Vec3f cameraMotionSphereCenter(0.0, 0.0, -10.0);
-    Vec3f cameraMotionSphereCenter(1.17518, 0.663388, -0.00610712);
-    float horizontalCircleRadius = 3;
+    Vec3f cameraMotionSphereCenter(0.0, 0.0, -10.0);
+//     Vec3f cameraMotionSphereCenter(1.17518, 0.663388, -0.00610712);  // PAC-216-wheel.obj
+    float circleRadius = 40;
+//     float circleRadius = 3;  // PAC-216-wheel.obj
+    float horizontalCircleRadius = circleRadius;
     float horizontalCircleAlpha = 0.0;
     float horizontalCircleSpeed = 5 * 3.14 / 180;
-    float verticalCircleRadius = 3;
+    float verticalCircleRadius = circleRadius;
     float verticalCircleAlpha = 0.0;
     float verticalCircleSpeed = 2 * 3.14 / 180;
     bool verticalCircleSpeedPositive = true;

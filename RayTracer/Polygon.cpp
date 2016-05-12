@@ -19,7 +19,8 @@ Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, 
     // 计算单位法向量
     Vec3f _edge1 = _vertices[1] - _vertices[0];
     Vec3f _edge2 = _vertices[2] - _vertices[1];
-    _normal = (_edge1.cross(_edge2)).normalize();
+    _normal = _edge1.cross(_edge2);
+    _normal.normalize();
 
     // 计算其所在平面
     _plane = Plane(_vertices[0], _normal, surfaceColor, emissionColor, transparency, reflection);
