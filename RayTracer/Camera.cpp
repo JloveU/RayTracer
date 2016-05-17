@@ -109,7 +109,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
         // 反射光线
         Vec3f reflectDirection = ray.direction() - intersectionNormal * 2 * ray.direction().dot(intersectionNormal);
         reflectDirection.normalize();
-        Vec3f nextReflection = trace(Ray(intersectionPoint + intersectionNormal * bias, reflectDirection), scene, depth + 1);
+        Vec3f nextReflection = trace(Ray(intersectionPoint + intersectionNormal * bias, reflectDirection), scene, depth + 1) * geometry->reflection();
 
         // 折射光线
         Vec3f nextRefraction = 0;
@@ -129,8 +129,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
     }
     else  // 如果该几何体表面是漫反射材质或是光源，则不需要继续跟踪光线
     {
-
-        if (false)  //geometry->emissionColor().x > 0)  // 如果是光源 TODO
+        if (geometry->emissionColor().x > 0 || geometry->emissionColor().y > 0 || geometry->emissionColor().z > 0)  // 如果是光源 TODO
         {
             surfaceColor = geometry->emissionColor();
         } 
@@ -139,7 +138,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
             // 计算场景中所有光源在该漫反射点贡献的光之和
             for(unsigned i = 0; i < geometries.size(); i++)
             {
-                if(geometries[i]->emissionColor().x > 0)  // 如果是光源
+                if(geometries[i]->emissionColor().x > 0 || geometries[i]->emissionColor().y > 0 || geometries[i]->emissionColor().z > 0)  // 如果是光源
                 {
                     // 光源只能是Sphere类型的Geometry
                     const Sphere *light = dynamic_cast<const Sphere *>(geometries[i]);
