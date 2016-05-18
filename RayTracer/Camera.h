@@ -94,7 +94,7 @@ private:
     Vec3f _headDirection;  // 头顶指向的方向上的单位向量
     float _verticalFOV;  // 垂直视场角
     float _distanceFromEye2Image;  // 从眼睛到像面的距离
-    unsigned _imageWidth, _imageHeight;  // 图像宽高
+    int _imageWidth, _imageHeight;  // 图像宽高
     cv::Mat _image;  // 图像
 
 };

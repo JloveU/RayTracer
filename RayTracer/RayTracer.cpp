@@ -19,19 +19,27 @@
 int main()
 {
     // 场景
-    Scene scene(Vec3f(1.0, 1.0, 1.0));
+    Scene scene(Vec3f(0.2, 0.5, 0.8));
     // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
     scene.addAxes();
     // 添加地面（无限平面）
 //     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.6, 0.6, 0.6), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    const Vec3f _vertices1[4] = {Vec3f(-30.0, -4.0, 20.0), Vec3f(30.0, -4.0, 20.0), Vec3f(30.0, -4.0, -40.0), Vec3f(-30.0, -4.0, -40.0)};
-    const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 4);
-    scene.addGeometry(new Polygon(vertices1, Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+//     const Vec3f _vertices1[4] = {Vec3f(-30.0, -4.0, 20.0), Vec3f(30.0, -4.0, 20.0), Vec3f(30.0, -4.0, -40.0), Vec3f(-30.0, -4.0, -40.0)};
+//     const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 4);
+//     scene.addGeometry(new Polygon(vertices1, Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    Triangle *triangle1 = new Triangle(Vec3f(-30.0, -4.0, 20.0), Vec3f(30.0, -4.0, 20.0), Vec3f(30.0, -4.0, -40.0));
+    triangle1->setTextureFileName("./Textures/texture2.png");
+    triangle1->setTextureCoordinates(Vec2f(0.0, 0.0), Vec2f(10.0, 0.0), Vec2f(10.0, 10.0));
+    scene.addGeometry(triangle1);
+    Triangle *triangle2 = new Triangle(Vec3f(30.0, -4.0, -40.0), Vec3f(-30.0, -4.0, -40.0), Vec3f(-30.0, -4.0, 20.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0);
+    triangle2->setTextureFileName("./Textures/texture2.png");
+    triangle2->setTextureCoordinates(Vec2f(10.0, 10.0), Vec2f(0.0, 10.0), Vec2f(0.0, 0.0));
+    scene.addGeometry(triangle2);
     // 添加球体
-    scene.addGeometry(new Sphere(Vec3f(0.0, 0.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 0.8));
-    scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.8));
-    scene.addGeometry(new Sphere(Vec3f(5.0, 0.0, -15.0),  3.0, Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.8));
-    scene.addGeometry(new Sphere(Vec3f(-5.5, 0.0, -5.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    scene.addGeometry(new Sphere(Vec3f(0.0, 2.0, -10.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0));
+//     scene.addGeometry(new Sphere(Vec3f(5.0, -1.0, -5.0), 2.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    scene.addGeometry(new Sphere(Vec3f(8.0, 1.0, -10.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+    scene.addGeometry(new Sphere(Vec3f(-7, 0.0, -10.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
 //     // 添加三角形
 //     scene.addGeometry(new Triangle(Vec3f(-5.0, 2.0, -8.0), Vec3f(5.0, 2.0, -8.0), Vec3f(0.0, 10.66, -8.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
 //     // 添加五边形（多边形）
@@ -53,8 +61,8 @@ int main()
 //     mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
 //     scene.addGeometry(mesh1);
     // 添加光源
-    scene.addGeometry(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.5, 1.5, 1.5), 0.0, 0.0));
-    scene.addGeometry(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0));
+    scene.addGeometry(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(2.0, 2.0, 2.0), 0.0, 0.0));
+    scene.addGeometry(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0));
 
     // 相机
     Camera camera(Vec3f(0.0, 0.0, 10.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 640, 480);
@@ -124,8 +132,8 @@ int main()
 
     std::cout << "动画结束！共 " << frameCount << " 帧，整个过程用时 " << (processEndTime - processStartTime) / 1000 << " s。" << std::endl;
     std::cout << "动画已保存到视频文件 " << videoFileName << std::endl;
-//     std::cout << "按回车键退出..." << std::endl;
-//     std::cin.get();
+    std::cout << "按回车键退出..." << std::endl;
+    std::cin.get();
 
     return 0;
 }

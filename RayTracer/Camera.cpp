@@ -178,14 +178,15 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
 
 const cv::Mat & Camera::render(const Scene &scene)
 {
-    float invWidth = 1 / float(_imageWidth), invHeight = 1 / float(_imageHeight);
-    float aspectRatio = _imageWidth / float(_imageHeight);
-    float imageRealHeightHalf = tan(PI * 0.5 * _verticalFOV / 180.0) * _distanceFromEye2Image;  // 图像半高的实际长度
+    const float invWidth = 1 / float(_imageWidth), invHeight = 1 / float(_imageHeight);
+    const float aspectRatio = _imageWidth / float(_imageHeight);
+    const float imageRealHeightHalf = tan(PI * 0.5 * _verticalFOV / 180.0) * _distanceFromEye2Image;  // 图像半高的实际长度
 
     // 对每个像素点进行光线跟踪
-    for(unsigned row = 0; row < _imageHeight; row++)
+#pragma omp parallel for
+    for(int row = 0; row < _imageHeight; row++)
     {
-        for(unsigned col = 0; col < _imageWidth; col++)
+        for(int col = 0; col < _imageWidth; col++)
         {
             // 以图像中心点为坐标原点，宽为x轴，高为y轴时，该像素点的x、y坐标
             float x = (2 * ((col + 0.5) * invWidth) - 1) * imageRealHeightHalf * aspectRatio;
