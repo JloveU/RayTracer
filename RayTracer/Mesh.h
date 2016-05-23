@@ -13,7 +13,7 @@ class Mesh : public GeometryUnion
 {
 
 public:
-    Mesh(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Mesh(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     // 读取obj模型文件
     // 正确读取完毕返回0，出错返回-1

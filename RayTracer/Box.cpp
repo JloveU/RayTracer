@@ -7,8 +7,8 @@ const Vec3f Box::_defaultOrigin = Vec3f(0.0, 0.0, 0.0);
 const Vec3f Box::_defaultSize = Vec3f(1.0, 1.0, 1.0);
 
 
-Box::Box(const Vec3f &origin, const Vec3f &size, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
-    :Geometry(surfaceColor, emissionColor, transparency, reflection)
+Box::Box(const Vec3f &origin, const Vec3f &size, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
+    :Geometry(surfaceColor, emissionColor, transparency, specular, diffuse)
     ,_origin(origin)
 {
     // ³ß´ç±ØÐë´óÓÚ0

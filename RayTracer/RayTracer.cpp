@@ -20,45 +20,46 @@ int main()
 {
     // 场景
     Scene scene(Vec3f(0.2, 0.5, 0.8));
-    // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
-    scene.addAxes();
+//     Scene scene(Vec3f(0.5, 0.5, 0.5));
+//     // 添加坐标系标志（即在坐标原点处放3个分别平行于xy、yz、zx平面的三角形）
+//     scene.addAxes();
     // 添加地面（无限平面）
 //     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.6, 0.6, 0.6), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    Triangle *triangle1 = new Triangle(Vec3f(-30.0, 0.0, 30.0), Vec3f(30.0, -0.0, 30.0), Vec3f(30.0, 0.0, -30.0));
+    Triangle *triangle1 = new Triangle(Vec3f(-30.0, 0.0, 30.0), Vec3f(30.0, -0.0, 30.0), Vec3f(30.0, 0.0, -30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0);
     triangle1->setTextureFileName("./Textures/texture2.png");
     triangle1->setTextureCoordinates(Vec2f(0.0, 0.0), Vec2f(10.0, 0.0), Vec2f(10.0, 10.0));
     scene.addGeometry(triangle1);
-    Triangle *triangle2 = new Triangle(Vec3f(30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, 30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0);
+    Triangle *triangle2 = new Triangle(Vec3f(30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, 30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0);
     triangle2->setTextureFileName("./Textures/texture2.png");
     triangle2->setTextureCoordinates(Vec2f(10.0, 10.0), Vec2f(0.0, 10.0), Vec2f(0.0, 0.0));
     scene.addGeometry(triangle2);
     // 添加球体
-    scene.addGeometry(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0));
-    scene.addGeometry(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-    scene.addGeometry(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-    // 添加三角形
-    scene.addGeometry(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-    // 添加五边形（多边形）
-    const Vec3f _vertices1[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
-    const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 5);
-    scene.addGeometry(new Polygon(vertices1, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-    // 添加长方体
-    scene.addGeometry(new Box(Vec3f(3.0, 2.0, -6.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
-    // 添加四面体（组合几何图形）
-    GeometryUnion *geometryUnion1 = new GeometryUnion(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
-    float geometryUnion1Size = 5;
-    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0)));
-    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
-    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0)));
-    geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
-    scene.addGeometry(geometryUnion1);
+    scene.addGeometry(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0, 0.0));
+    scene.addGeometry(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.8, 0.4));
+    scene.addGeometry(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.1, 0.3));
+//     // 添加三角形
+//     scene.addGeometry(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+//     // 添加五边形（多边形）
+//     const Vec3f _vertices1[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
+//     const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 5);
+//     scene.addGeometry(new Polygon(vertices1, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+//     // 添加长方体
+//     scene.addGeometry(new Box(Vec3f(3.0, 2.0, -6.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+//     // 添加四面体（组合几何图形）
+//     GeometryUnion *geometryUnion1 = new GeometryUnion(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
+//     float geometryUnion1Size = 5;
+//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0)));
+//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
+//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0)));
+//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
+//     scene.addGeometry(geometryUnion1);
 //     // 添加Mesh
 //     Mesh *mesh1 = new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
 //     mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
 //     scene.addGeometry(mesh1);
     // 添加光源
-    scene.addGeometry(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(2.0, 2.0, 2.0), 0.0, 0.0));
-    scene.addGeometry(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0));
+    scene.addGeometry(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0, 0.0));
+//     scene.addGeometry(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0, 0.0));
 
     // 相机
     Camera camera(Vec3f(0.0, 0.0, 40.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 640, 480);
@@ -74,10 +75,12 @@ int main()
     float horizontalCircleAlpha = 0.0;
     float horizontalCircleSpeed = 5 * 3.14 / 180;
     float verticalCircleRadius = circleRadius;
-    float verticalCircleAlpha = 0.0;
+    float verticalCircleAlpha = 30 * 3.14 / 180;
     float verticalCircleSpeed = 2 * 3.14 / 180;
     bool verticalCircleSpeedPositive = true;
-    std::string videoFileName("./RenderResults/animationTemp.avi");
+    std::stringstream videoFileNameStream;
+    videoFileNameStream << "./RenderResults/animationTemp_" << time(0) << ".avi";
+    std::string videoFileName(videoFileNameStream.str());
     cv::VideoWriter videoWriter(videoFileName, CV_FOURCC('M', 'J', 'P', 'G'), 20, camera.image().size(), true);
     clock_t processStartTime = clock();  // 整个动画开始时间（clock()函数返回从程序开始运行到现在的毫秒数）
     clock_t processEndTime = processStartTime;  // 整个动画结束时间

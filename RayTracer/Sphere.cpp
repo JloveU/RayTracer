@@ -7,8 +7,8 @@ const Vec3f Sphere::_defaultCenter = Vec3f(0.0, 0.0, 0.0);
 const float Sphere::_defaultRadius = 1.0;
 
 
-Sphere::Sphere(const Vec3f &center, const float radius, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
-    :Geometry(surfaceColor, emissionColor, transparency, reflection)
+Sphere::Sphere(const Vec3f &center, const float radius, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
+    :Geometry(surfaceColor, emissionColor, transparency, specular, diffuse)
     ,_center(center)
     ,_radius(radius)
     ,_radius2(radius * radius)

@@ -12,7 +12,7 @@ class Sphere : public Geometry
 {
 
 public:
-    Sphere(const Vec3f &center = _defaultCenter, const float radius = _defaultRadius, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Sphere(const Vec3f &center = _defaultCenter, const float radius = _defaultRadius, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     inline const Vec3f & center() const
     {

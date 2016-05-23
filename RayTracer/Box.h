@@ -14,7 +14,7 @@ class Box : public Geometry
 {
 
 public:
-    Box(const Vec3f &origin = _defaultOrigin, const Vec3f &size = _defaultSize, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Box(const Vec3f &origin = _defaultOrigin, const Vec3f &size = _defaultSize, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     inline const Vec3f & origin() const
     {

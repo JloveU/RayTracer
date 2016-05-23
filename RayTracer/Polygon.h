@@ -14,7 +14,7 @@ class Polygon : public Geometry
 {
 
 public:
-    Polygon(const std::vector<Vec3f> &vertices = _defaultVertices, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Polygon(const std::vector<Vec3f> &vertices = _defaultVertices, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     inline const std::vector<Vec3f> & vertices() const
     {

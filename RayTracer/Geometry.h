@@ -12,7 +12,7 @@ class Geometry
 {
 
 public:
-    Geometry(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Geometry(const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     // 实现多态用途的父类必须有纯虚析构函数（但必须有定义(在.cpp文件中)，否则会链接出错）,否则会存在内存泄漏
     virtual ~Geometry() = 0;
@@ -32,9 +32,19 @@ public:
         return _transparency;
     }
 
-    inline float reflection() const
+    inline float specular() const
     {
-        return _reflection;
+        return _specular;
+    }
+
+    inline float diffuse() const
+    {
+        return _diffuse;
+    }
+
+    inline bool isLight() const
+    {
+        return _emissionColor.x > 0 || _emissionColor.y > 0 || _emissionColor.z > 0;
     }
 
     inline void setTextureFileName(const std::string &textureFileName)
@@ -63,7 +73,8 @@ private:
     Vec3f _surfaceColor;  // 表面颜色
     Vec3f _emissionColor;  // 发光颜色
     float _transparency;  // 透明度
-    float _reflection;  // 反射系数
+    float _specular;  // 镜面反射系数
+    float _diffuse;  // 漫反射系数
     std::string _textureFileName;  // 纹理图片文件的路径
 
 public:
@@ -71,7 +82,8 @@ public:
     static const Vec3f _defaultSurfaceColor;
     static const Vec3f _defaultEmissionColor;
     static const float _defaultTransparency;
-    static const float _defaultReflection;
+    static const float _defaultSpecular;
+    static const float _defaultDiffuse;
 
 };
 

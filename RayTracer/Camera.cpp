@@ -54,6 +54,11 @@ Camera::Camera(const Vec3f &viewPoint, const Vec3f &viewDirection, const Vec3f &
 // 返回该光线收集到的颜色
 Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
 {
+    if(depth >= MAX_DEPTH)
+    {
+        return scene.backgroundColor();
+    }
+
     float tNearest = INFINITY;  // 光线与第1个遇到的几何体相遇时对应的光线时刻
     const std::vector<Geometry *> geometries = scene.geometries();
     const Geometry *geometry = NULL;  // 光线第1个遇到的几何体
@@ -98,81 +103,85 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
         inside = true;
     }
 
-    // 跟踪反射和折射光线
-    if((geometry->transparency() > 0 || geometry->reflection() > 0) && depth < MAX_DEPTH)
+    // 如果是光源 TODO
+    if (geometry->isLight())
     {
-        // 计算菲涅尔定律
-        float facingRatio = (-1) * ray.direction().dot(intersectionNormal);
-        float mix = 0.1;
-        float fresnelEffect = 1 * mix + pow(1.0 - facingRatio, 3) * (1 - mix);
+        return geometry->emissionColor();
+    }
 
-        // 反射光线
+    // 计算菲涅尔定律
+    float facingRatio = (-1) * ray.direction().dot(intersectionNormal);
+    float mix = 0.1;
+    float fresnelEffect = 1 * mix + pow(1.0 - facingRatio, 3) * (1 - mix);
+
+    // 计算镜面反射光线
+    Vec3f nextSpecular(0.0, 0.0, 0.0);
+    if(geometry->specular() > 0)
+    {
         Vec3f reflectDirection = ray.direction() - intersectionNormal * 2 * ray.direction().dot(intersectionNormal);
         reflectDirection.normalize();
-        Vec3f nextReflection = trace(Ray(intersectionPoint + intersectionNormal * bias, reflectDirection), scene, depth + 1) * geometry->reflection();
-
-        // 折射光线
-        Vec3f nextRefraction = 0;
-        if(geometry->transparency())  // 只有该几何体是透明的时候，才存在折射光线并跟踪之
-        {
-            float ior = 1.1;  // 折射率 TODO 此处折射率固定，如果方便的话将折射率添加为Geometry类的属性之一
-            float eta = inside ? ior : 1.0/ior;  // 如果入射光线在几何体内部，则折射率转为倒数
-            float cosin = (-1) * intersectionNormal.dot(ray.direction());
-            float k = 1 - eta * eta * (1 - cosin * cosin);
-            Vec3f refractionDirection = ray.direction() * eta + intersectionNormal * (eta * cosin - sqrt(k));
-            refractionDirection.normalize();
-            nextRefraction = trace(Ray(intersectionPoint - intersectionNormal * bias, refractionDirection), scene, depth + 1);
-        }
-
-        // 光线颜色是反射光线和折射光线的贡献总和
-        surfaceColor = (nextReflection * fresnelEffect + nextRefraction * (1 - fresnelEffect) * geometry->transparency()) * intersectionColor;
+        nextSpecular = trace(Ray(intersectionPoint + intersectionNormal * bias, reflectDirection), scene, depth + 1) * geometry->specular();
     }
-    else  // 如果该几何体表面是漫反射材质或是光源，则不需要继续跟踪光线
+
+    // 计算折射光线
+    Vec3f nextRefraction(0.0, 0.0, 0.0);
+    if(geometry->transparency() > 0)
     {
-        if (geometry->emissionColor().x > 0 || geometry->emissionColor().y > 0 || geometry->emissionColor().z > 0)  // 如果是光源 TODO
+        float ior = 1.1;  // 折射率 TODO 此处折射率固定，如果方便的话将折射率添加为Geometry类的属性之一
+        float eta = inside ? ior : 1.0/ior;  // 如果入射光线在几何体内部，则折射率转为倒数
+        float cosin = (-1) * intersectionNormal.dot(ray.direction());
+        float k = 1 - eta * eta * (1 - cosin * cosin);
+        Vec3f refractionDirection = ray.direction() * eta + intersectionNormal * (eta * cosin - sqrt(k));
+        refractionDirection.normalize();
+        nextRefraction = trace(Ray(intersectionPoint - intersectionNormal * bias, refractionDirection), scene, depth + 1) * geometry->transparency();
+    }
+
+    // 光线颜色是反射光线和折射光线的贡献总和
+    surfaceColor += (nextSpecular * fresnelEffect + nextRefraction * (1 - fresnelEffect));
+
+    // 计算漫反射
+    Vec3f diffuse(0.0, 0.0, 0.0);
+    if(geometry->diffuse() > 0)
+    {
+        // 计算场景中所有光源在该漫反射点贡献的光之和
+        for(unsigned i = 0; i < geometries.size(); i++)
         {
-            surfaceColor = geometry->emissionColor();
-        } 
-        else  // 如果是表面是漫反射材质的几何体
-        {
-            // 计算场景中所有光源在该漫反射点贡献的光之和
-            for(unsigned i = 0; i < geometries.size(); i++)
+            if(geometries[i]->isLight())  // 如果是光源
             {
-                if(geometries[i]->emissionColor().x > 0 || geometries[i]->emissionColor().y > 0 || geometries[i]->emissionColor().z > 0)  // 如果是光源
+                // 光源只能是Sphere类型的Geometry
+                const Sphere *light = dynamic_cast<const Sphere *>(geometries[i]);
+                if (!light)
                 {
-                    // 光源只能是Sphere类型的Geometry
-                    const Sphere *light = dynamic_cast<const Sphere *>(geometries[i]);
-                    if (!light)
-                    {
-                        throw std::runtime_error("Light must not be Geometry which is not Sphere!");
-                    }
-
-                    Vec3f transmission(1.0, 1.0, 1.0);
-                    Vec3f lightDirection = light->center() - intersectionPoint;
-                    lightDirection.normalize();
-
-                    // 检查和光源之间是否有遮挡，以达到阴影效果
-                    for(unsigned j = 0; j < geometries.size(); ++j)
-                    {
-                        if(i != j)
-                        {
-                            if(geometries[j]->intersect(Ray(intersectionPoint + intersectionNormal * bias, lightDirection)) > 0)
-                            {
-                                // 若有几何图形遮挡并且该几何图形透明，则根据透明度计算透射系数
-                                transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();  // 因为不允许在透明几何图形上贴纹理，所以此处直接用几何图形的表面颜色属性
-                            }                        
-                        }
-                    }                
-
-                    // 如果光源在交点处的背面，则该光源在此处光照为0
-                    surfaceColor += intersectionColor * transmission * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometries[i]->emissionColor();
+                    throw std::runtime_error("Light must not be Geometry which is not Sphere!");
                 }
+
+                Vec3f transmission(1.0, 1.0, 1.0);
+                Vec3f lightDirection = light->center() - intersectionPoint;
+                lightDirection.normalize();
+
+                // 检查和光源之间是否有遮挡，以达到阴影效果
+                for(unsigned j = 0; j < geometries.size(); ++j)
+                {
+                    if(i != j)
+                    {
+                        if(geometries[j]->intersect(Ray(intersectionPoint + intersectionNormal * bias, lightDirection)) > 0)
+                        {
+                            // 若有几何图形遮挡并且该几何图形透明，则根据透明度计算透射系数
+                            transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();  // 因为不允许在透明几何图形上贴纹理，所以此处直接用几何图形的表面颜色属性
+                        }
+                    }
+                }                
+
+                // 如果光源在交点处的背面，则该光源在此处光照为0
+                surfaceColor += transmission * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometries[i]->emissionColor() * geometry->diffuse();
             }
         }
 
+        // 背景光在该漫反射点贡献的光 TODO
+//         surfaceColor += scene.backgroundColor() * 0.2 * geometry->diffuse();
     }
 
-    return surfaceColor + geometry->emissionColor();
+    return surfaceColor * intersectionColor + geometry->emissionColor();
 }
 
 

@@ -8,8 +8,8 @@
 #include "Triangle.h"
 
 
-Mesh::Mesh(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
-    :GeometryUnion(surfaceColor, emissionColor, transparency, reflection)
+Mesh::Mesh(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
+    :GeometryUnion(surfaceColor, emissionColor, transparency, specular, diffuse)
 {
 }
 

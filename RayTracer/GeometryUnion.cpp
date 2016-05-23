@@ -1,8 +1,8 @@
 #include "GeometryUnion.h"
 
 
-GeometryUnion::GeometryUnion(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
-    :Geometry(surfaceColor, emissionColor, transparency, reflection)
+GeometryUnion::GeometryUnion(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
+    :Geometry(surfaceColor, emissionColor, transparency, specular, diffuse)
 {
 }
 

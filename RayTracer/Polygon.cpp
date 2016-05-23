@@ -6,8 +6,8 @@ const Vec3f __defaultVertices[4] = {Vec3f(-1.0, 0.0, 0.0), Vec3f(1.0, 0.0, 0.0),
 const std::vector<Vec3f> Polygon::_defaultVertices(__defaultVertices, __defaultVertices + 4);
 
 
-Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float reflection)
-    :Geometry(surfaceColor, emissionColor, transparency, reflection)
+Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
+    :Geometry(surfaceColor, emissionColor, transparency, specular, diffuse)
     ,_vertices(vertices)
 {
     // 顶点数量必须大于3
@@ -23,7 +23,7 @@ Polygon::Polygon(const std::vector<Vec3f> &vertices, const Vec3f &surfaceColor, 
     _normal.normalize();
 
     // 计算其所在平面
-    _plane = Plane(_vertices[0], _normal, surfaceColor, emissionColor, transparency, reflection);
+    _plane = Plane(_vertices[0], _normal, surfaceColor, emissionColor, transparency, specular);
 
     // 检查所有顶点是否共面
     for (unsigned i = 0; i < _vertices.size(); i++)

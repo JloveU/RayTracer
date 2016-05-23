@@ -14,7 +14,7 @@ class Plane : public Geometry
 {
 
 public:
-    Plane(const Vec3f &point = _defaultPoint, const Vec3f &normal = _defaultNormal, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float reflection = _defaultReflection);
+    Plane(const Vec3f &point = _defaultPoint, const Vec3f &normal = _defaultNormal, const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
     inline const Vec3f & point() const
     {
