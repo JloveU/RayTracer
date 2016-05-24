@@ -48,14 +48,14 @@ int main()
     const std::vector<Vec3f> polygon1Vertices(_polygon1Vertices, _polygon1Vertices + 5);
     scene.addGeometry(shared_ptr<Polygon>(new Polygon(polygon1Vertices, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0)));
     // 添加长方体
-    scene.addGeometry(shared_ptr<Box>(new Box(Vec3f(3.0, 5.0, -6.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2)));
+    scene.addGeometry(shared_ptr<Box>(new Box(Vec3f(4.0, 5.0, -7.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2)));
     // 添加四面体（组合几何图形）
     shared_ptr<GeometryUnion> geometryUnion1(new GeometryUnion(Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
     float geometryUnion1Size = 5;
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
     scene.addGeometry(geometryUnion1);
 //     // 添加Mesh
 //     shared_ptr<Mesh> mesh1(new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
@@ -66,7 +66,7 @@ int main()
     scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0, 0.0)));
 
     // 相机
-    Camera camera(Vec3f(0.0, 0.0, 40.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 640, 480);
+    Camera camera(Vec3f(0.0, 0.0, 40.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 40, 1, 1280, 720);
 
     // 动画展示（不停地移动相机并且转动相机的朝向）
     // 动画中，场景中的所有几何体以及光源固定不动，只移动相机位置及指向
@@ -77,7 +77,7 @@ int main()
 //     float circleRadius = 3;  // PAC-216-wheel.obj
     float horizontalCircleRadius = circleRadius;
     float horizontalCircleAlpha = 0.0;
-    float horizontalCircleSpeed = 5 * 3.14 / 180;
+    float horizontalCircleSpeed = 3 * 3.14 / 180;
     float verticalCircleRadius = circleRadius;
     float verticalCircleAlpha = 30 * 3.14 / 180;
     float verticalCircleSpeed = 2 * 3.14 / 180;
