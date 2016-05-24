@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "Vector.h"
 #include "Triangle.h"
+#include "TexturePool.h"
+#include "shared_ptr.h"
 
 
 Mesh::Mesh(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
@@ -101,7 +103,8 @@ int Mesh::loadObj(const std::string &fileName)
     // 逐行读取顶点或三角面片信息
     std::string bufferLine;
     std::string textureFileName;
-    std::string currentPath = fileName.substr(0, fileName.find_last_of("/") + 1);
+    std::string textureKey;
+    const std::string currentPath = fileName.substr(0, fileName.find_last_of("/") + 1);
     while(!in.eof())
     {
         std::getline(in, bufferLine);
@@ -124,6 +127,8 @@ int Mesh::loadObj(const std::string &fileName)
                 return -1;
             }
             textureFileName = getTextureFileName(fileName, bufferLineSplit[1]);
+            textureKey = bufferLineSplit[1];
+            TexturePool::instance().add(textureKey, currentPath + textureFileName);
         }
         else if (bufferLineSplit[0] == "vt")  // 顶点的纹理坐标
         {
@@ -149,7 +154,7 @@ int Mesh::loadObj(const std::string &fileName)
                 faceVertices.val[i] = atoi(bufferLineSplitSplit[0].c_str());
             }
             facesVertices.push_back(faceVertices);
-            Triangle *triangle = new Triangle(vertices[faceVertices.val[0] - 1], vertices[faceVertices.val[1] - 1], vertices[faceVertices.val[2] - 1]);
+            const shared_ptr<Triangle> triangle(new Triangle(vertices[faceVertices.val[0] - 1], vertices[faceVertices.val[1] - 1], vertices[faceVertices.val[2] - 1]));
 
             if (stringSplit(bufferLineSplit[1], "/").size() > 1)  // 有纹理坐标
             {
@@ -160,7 +165,7 @@ int Mesh::loadObj(const std::string &fileName)
                     faceTextureCoordinates.val[i] = atoi(bufferLineSplitSplit[1].c_str());
                 }
                 facesTextureCoordinates.push_back(faceTextureCoordinates);
-                triangle->setTextureFileName(currentPath + textureFileName);
+                triangle->setTexture(textureKey);
                 triangle->setTextureCoordinates(textureCoordinates[faceTextureCoordinates.val[0] - 1], textureCoordinates[faceTextureCoordinates.val[1] - 1], textureCoordinates[faceTextureCoordinates.val[2] - 1]);
             }
             addGeometry(triangle);

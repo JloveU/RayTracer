@@ -51,6 +51,9 @@
     <ClCompile Include="RayTracer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TexturePool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ray.h">
@@ -90,6 +93,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shared_ptr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePool.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

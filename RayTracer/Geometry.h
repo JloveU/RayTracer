@@ -3,8 +3,11 @@
 
 
 #include <string>
+#include <opencv.hpp>
 #include "Vector.h"
 #include "Ray.h"
+#include "TexturePool.h"
+#include "shared_ptr.h"
 
 
 // 场景中所有物体的父类
@@ -47,19 +50,16 @@ public:
         return _emissionColor.x > 0 || _emissionColor.y > 0 || _emissionColor.z > 0;
     }
 
-    inline void setTextureFileName(const std::string &textureFileName)
+    void setTexture(const std::string &textureKey);
+
+    inline const shared_ptr<const cv::Mat> & texture() const
     {
-        _textureFileName = textureFileName;
+        return _textureImage;
     }
 
-    inline const std::string & textureFileName() const
+    inline bool hasTexture() const
     {
-        return _textureFileName;
-    }
-
-    inline bool hasTextureFile() const
-    {
-        return !_textureFileName.empty();
+        return _textureImage;
     }
 
     // 计算光线和该物体的第1个交点
@@ -75,7 +75,7 @@ private:
     float _transparency;  // 透明度
     float _specular;  // 镜面反射系数
     float _diffuse;  // 漫反射系数
-    std::string _textureFileName;  // 纹理图片文件的路径
+    shared_ptr<const cv::Mat> _textureImage;  // 纹理图像
 
 public:
     // 各属性的默认值

@@ -7,7 +7,7 @@ GeometryUnion::GeometryUnion(const Vec3f &surfaceColor, const Vec3f &emissionCol
 }
 
 
-void GeometryUnion::addGeometry(Geometry *geometry)
+void GeometryUnion::addGeometry(const shared_ptr<Geometry> &geometry)
 {
     _geometries.push_back(geometry);
 }
@@ -15,12 +15,6 @@ void GeometryUnion::addGeometry(Geometry *geometry)
 
 void GeometryUnion::removeAllGeometries()
 {
-    // œ» Õ∑≈ƒ⁄¥Ê
-    for (unsigned i = 0; i < _geometries.size(); i++)
-    {
-        delete _geometries[i];
-    }
-
     _geometries.clear();
 }
 

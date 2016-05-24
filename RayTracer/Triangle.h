@@ -7,6 +7,7 @@
 #include "Vector.h"
 #include "Geometry.h"
 #include "Ray.h"
+#include "shared_ptr.h"
 
 
 // Èý½ÇÐÎ
@@ -16,9 +17,19 @@ class Triangle : public Geometry
 public:
     Triangle(const Vec3f &vertex0 = _defaultVertices[0], const Vec3f &vertex1 = _defaultVertices[1], const Vec3f &vertex2 = _defaultVertices[2], const Vec3f &surfaceColor = _defaultSurfaceColor, const Vec3f &emissionColor = _defaultEmissionColor, const float transparency = _defaultTransparency, const float specular = _defaultSpecular, const float diffuse = _defaultDiffuse);
 
-    inline const Vec3f * vertices() const
+    inline const Vec3f & vertice0() const
     {
-        return _vertices;
+        return _vertices[0];
+    }
+
+    inline const Vec3f & vertice1() const
+    {
+        return _vertices[1];
+    }
+
+    inline const Vec3f & vertice2() const
+    {
+        return _vertices[2];
     }
 
     inline const Vec3f & normal() const
@@ -26,17 +37,7 @@ public:
         return _normal;
     }
 
-    inline void setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2f &textureCoordinate1, const Vec2f &textureCoordinate2)
-    {
-        if (!hasTextureFile())
-        {
-            throw std::runtime_error("Texture file should be set before set texture coordinate!");
-        }
-        _textureCoordinates.resize(3);
-        _textureCoordinates[0] = textureCoordinate0;
-        _textureCoordinates[1] = textureCoordinate1;
-        _textureCoordinates[2] = textureCoordinate2;
-    }
+    void setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2f &textureCoordinate1, const Vec2f &textureCoordinate2);
 
     virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 

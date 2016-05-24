@@ -21,7 +21,7 @@ Scene::Scene(const Vec3f &backgroundColor)
 }
 
 
-void Scene::addGeometry(Geometry *geometry)
+void Scene::addGeometry(const shared_ptr<Geometry> &geometry)
 {
     _geometries.push_back(geometry);
 }
@@ -29,12 +29,6 @@ void Scene::addGeometry(Geometry *geometry)
 
 void Scene::removeAllGeometries()
 {
-    // 先释放内存
-    for (unsigned i = 0; i < _geometries.size(); i++)
-    {
-        delete _geometries[i];
-    }
-
     _geometries.clear();
 }
 
@@ -44,12 +38,12 @@ void Scene::addAxes()
     float axesSize = 1.0;
 
     // 在坐标原点处放3个分别平行于xy、yz、zx平面的三角形
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, axesSize, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, axesSize), Vec3f(axesSize, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
 
     // 沿3个坐标轴分别放一个矩形（矩形长近似无限大，宽近似无限小）
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(INFINITY, 0.0, 0.0), Vec3f(0.0, 0.02, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, INFINITY, 0.0), Vec3f(0.0, 0.0, 0.02), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    addGeometry(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, INFINITY), Vec3f(0.02, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(INFINITY, 0.0, 0.0), Vec3f(0.0, 0.02, 0.0), Vec3f(1.0, 0.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, INFINITY, 0.0), Vec3f(0.0, 0.0, 0.02), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
+    addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 0.0, INFINITY), Vec3f(0.02, 0.0, 0.0), Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0)));
 }

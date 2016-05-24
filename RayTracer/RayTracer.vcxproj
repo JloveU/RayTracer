@@ -89,6 +89,7 @@
     <ClCompile Include="RayTracer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="TexturePool.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +103,9 @@
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="shared_ptr.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="TexturePool.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

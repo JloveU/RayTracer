@@ -40,8 +40,17 @@ Geometry::Geometry(const Vec3f &surfaceColor, const Vec3f &emissionColor, const 
     _transparency = transparency;
     _specular = specular;
     _diffuse = diffuse;
+}
 
-    _textureFileName.clear();
+void Geometry::setTexture(const std::string &textureKey)
+{
+    const shared_ptr<const cv::Mat> textureImage = TexturePool::instance().get(textureKey);
+    if (!textureImage)
+    {
+        throw std::runtime_error("There is no texture named " + textureKey + "!");
+    }
+
+    _textureImage = textureImage;
 }
 
 Geometry::~Geometry()

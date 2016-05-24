@@ -73,36 +73,35 @@ float Polygon::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         // 用交点检测算法（这里的交点指的是2维投影平面上x轴与多边形的边的交点）判断交点是否在多边形内部
         float crossCount = 0;  // 2维投影平面（已将原点平移到该多边形所在平面与光线的交点处）x轴正半轴与2维投影多边形各边的交点数目
         unsigned verticesNum = vertices2D.size();
-        Vec2f *v1, *v2;
         for (unsigned i = 0, j = 1; i < verticesNum; i++, j = (i == verticesNum-1) ? 0 : i+1)
         {
-            v1 = &vertices2D[i];
-            v2 = &vertices2D[j];
-            if (v1->y * v2->y < 0)  // 如果两端点的y坐标均非0，且符号相同，则这条边与 X 轴正半轴无交点
+            Vec2f &v1 = vertices2D[i];
+            Vec2f &v2 = vertices2D[j];
+            if (v1.y * v2.y < 0)  // 如果两端点的y坐标均非0，且符号相同，则这条边与 X 轴正半轴无交点
             {
-                if (v1->x - v1->y * (v2->x-v1->x) / (v2->y-v1->y) > 0)  // 如果该边与x轴正半轴有交点
+                if (v1.x - v1.y * (v2.x-v1.x) / (v2.y-v1.y) > 0)  // 如果该边与x轴正半轴有交点
                 {
                     crossCount++;
                 }
             }
-//             else if (v1->y == 0)  // 如果该边的其中一个端点落在x轴上，则根据另一端点的y坐标判断，若正则计相交0.5次，若负则计相交-0.5次（TODO 实际运行好像不需要这种情况的判断，不知为何）
+//             else if (v1.y == 0)  // 如果该边的其中一个端点落在x轴上，则根据另一端点的y坐标判断，若正则计相交0.5次，若负则计相交-0.5次（TODO 实际运行好像不需要这种情况的判断，不知为何）
 //             {
-//                 if (v2->y > 0)
+//                 if (v2.y > 0)
 //                 {
 //                     crossCount += 0.5;
 //                 } 
-//                 else if (v2->y < 0)
+//                 else if (v2.y < 0)
 //                 {
 //                     crossCount -= 0.5;
 //                 }
 //             }
-//             else if (v2->y == 0)  // 同上
+//             else if (v2.y == 0)  // 同上
 //             {
-//                 if (v1->y > 0)
+//                 if (v1.y > 0)
 //                 {
 //                     crossCount += 0.5;
 //                 } 
-//                 else if (v1->y < 0)
+//                 else if (v1.y < 0)
 //                 {
 //                     crossCount -= 0.5;
 //                 }

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include "Sphere.h"
 #include "MathConstant.h"
+#include "shared_ptr.h"
 
 
 const int MAX_DEPTH = 5;  // 最大递归次数
@@ -60,8 +61,8 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
     }
 
     float tNearest = INFINITY;  // 光线与第1个遇到的几何体相遇时对应的光线时刻
-    const std::vector<Geometry *> geometries = scene.geometries();
-    const Geometry *geometry = NULL;  // 光线第1个遇到的几何体
+    const std::vector<const shared_ptr<Geometry> > geometries = scene.geometries();
+    shared_ptr<Geometry> geometry(NULL);  // 光线第1个遇到的几何体
 
     Vec3f intersectionNormal(0.0, 0.0, 0.0);  // 光线与第1个遇到的几何体的交点处的法向量
     Vec3f intersectionNormalTemp(0.0, 0.0, 0.0);
@@ -149,7 +150,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
             if(geometries[i]->isLight())  // 如果是光源
             {
                 // 光源只能是Sphere类型的Geometry
-                const Sphere *light = dynamic_cast<const Sphere *>(geometries[i]);
+                const Sphere *light = dynamic_cast<const Sphere *>(geometries[i].get());  // 此处用原始指针是因为如果使用shared_ptr的话后面会将Sphere错误地析构
                 if (!light)
                 {
                     throw std::runtime_error("Light must not be Geometry which is not Sphere!");

@@ -5,6 +5,7 @@
 #include <vector>
 #include "Vector.h"
 #include "Geometry.h"
+#include "shared_ptr.h"
 
 
 // 场景
@@ -19,13 +20,13 @@ public:
         return _backgroundColor;
     }
 
-    inline const std::vector<Geometry *> & geometries() const
+    inline const std::vector<const shared_ptr<Geometry> > & geometries() const
     {
         return _geometries;
     }
 
     // 添加几何图形到场景中
-    void addGeometry(Geometry *geometry);
+    void addGeometry(const shared_ptr<Geometry> &geometry);
 
     // 删除场景中的所有几何图形
     void removeAllGeometries();
@@ -35,7 +36,7 @@ public:
 
 private:
     Vec3f _backgroundColor;
-    std::vector<Geometry *> _geometries;
+    std::vector<const shared_ptr<Geometry> > _geometries;
 
 public:
     // 各属性的默认值

@@ -14,6 +14,7 @@
 #include "Box.h"
 #include "GeometryUnion.h"
 #include "Mesh.h"
+#include "shared_ptr.h"
 
 
 int main()
@@ -25,41 +26,44 @@ int main()
 //     scene.addAxes();
     // 添加地面（无限平面）
 //     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.6, 0.6, 0.6), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    Triangle *triangle1 = new Triangle(Vec3f(-30.0, 0.0, 30.0), Vec3f(30.0, -0.0, 30.0), Vec3f(30.0, 0.0, -30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0);
-    triangle1->setTextureFileName("./Textures/texture2.png");
+    std::string textureFileName("./Textures/texture2.png");
+    std::string textureKey("ground_texture");
+    TexturePool::instance().add(textureKey, textureFileName);
+    const shared_ptr<Triangle> triangle1(new Triangle(Vec3f(-30.0, 0.0, 30.0), Vec3f(30.0, -0.0, 30.0), Vec3f(30.0, 0.0, -30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
+    triangle1->setTexture(textureKey);
     triangle1->setTextureCoordinates(Vec2f(0.0, 0.0), Vec2f(10.0, 0.0), Vec2f(10.0, 10.0));
     scene.addGeometry(triangle1);
-    Triangle *triangle2 = new Triangle(Vec3f(30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, 30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0);
-    triangle2->setTextureFileName("./Textures/texture2.png");
+    const shared_ptr<Triangle> triangle2(new Triangle(Vec3f(30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, 30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
+    triangle2->setTexture(textureKey);
     triangle2->setTextureCoordinates(Vec2f(10.0, 10.0), Vec2f(0.0, 10.0), Vec2f(0.0, 0.0));
     scene.addGeometry(triangle2);
     // 添加球体
-    scene.addGeometry(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0, 0.0));
-    scene.addGeometry(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.8, 0.4));
-    scene.addGeometry(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.1, 0.3));
-//     // 添加三角形
-//     scene.addGeometry(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-//     // 添加五边形（多边形）
-//     const Vec3f _vertices1[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
-//     const std::vector<Vec3f> vertices1(_vertices1, _vertices1 + 5);
-//     scene.addGeometry(new Polygon(vertices1, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
-//     // 添加长方体
-//     scene.addGeometry(new Box(Vec3f(3.0, 2.0, -6.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
-//     // 添加四面体（组合几何图形）
-//     GeometryUnion *geometryUnion1 = new GeometryUnion(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
-//     float geometryUnion1Size = 5;
-//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0)));
-//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
-//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0)));
-//     geometryUnion1->addGeometry(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size)));
-//     scene.addGeometry(geometryUnion1);
+    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0, 0.0)));
+    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.6, 0.8)));
+    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.1, 0.6)));
+    // 添加三角形
+    scene.addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0)));
+    // 添加五边形（多边形）
+    const Vec3f _polygon1Vertices[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
+    const std::vector<Vec3f> polygon1Vertices(_polygon1Vertices, _polygon1Vertices + 5);
+    scene.addGeometry(shared_ptr<Polygon>(new Polygon(polygon1Vertices, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0)));
+    // 添加长方体
+    scene.addGeometry(shared_ptr<Box>(new Box(Vec3f(3.0, 5.0, -6.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2)));
+    // 添加四面体（组合几何图形）
+    shared_ptr<GeometryUnion> geometryUnion1(new GeometryUnion(Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+    float geometryUnion1Size = 5;
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(1.0, 1.0, 0.0))));
+    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 4.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 4.0), Vec3f(-8.0, 3.0, 4.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+    scene.addGeometry(geometryUnion1);
 //     // 添加Mesh
-//     Mesh *mesh1 = new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2);
+//     shared_ptr<Mesh> mesh1(new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
 //     mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
 //     scene.addGeometry(mesh1);
     // 添加光源
-    scene.addGeometry(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0, 0.0));
-//     scene.addGeometry(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0, 0.0));
+    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0, 0.0)));
+    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0, 0.0)));
 
     // 相机
     Camera camera(Vec3f(0.0, 0.0, 40.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 30, 1, 640, 480);
@@ -121,18 +125,19 @@ int main()
 //         }
 
         // 到达指定帧数时退出循环渲染
-        if(frameCount >= 400)
+        if(frameCount >= 300)
         {
             break;
         }
     }
 
+    videoWriter.release();
     cv::destroyWindow("Render result");
 
     std::cout << "动画结束！共 " << frameCount << " 帧，整个过程用时 " << (processEndTime - processStartTime) / 1000 << " s。" << std::endl;
     std::cout << "动画已保存到视频文件 " << videoFileName << std::endl;
-    std::cout << "按回车键退出..." << std::endl;
-    std::cin.get();
+//     std::cout << "按回车键退出..." << std::endl;
+//     std::cin.get();
 
     return 0;
 }

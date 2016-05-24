@@ -27,6 +27,19 @@ Triangle::Triangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vert
 }
 
 
+void Triangle::setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2f &textureCoordinate1, const Vec2f &textureCoordinate2)
+{
+    if (!hasTexture())
+    {
+        throw std::runtime_error("Texture should be set before set texture coordinate!");
+    }
+
+    _textureCoordinates.resize(3);
+    _textureCoordinates[0] = textureCoordinate0;
+    _textureCoordinates[1] = textureCoordinate1;
+    _textureCoordinates[2] = textureCoordinate2;
+}
+
 float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     Vec3f s = _vertices[0] - ray.origin();
@@ -41,7 +54,7 @@ float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         if (!_textureCoordinates.empty())  // 若有纹理，则计算纹理颜色
         {
             Vec2f textureCoordinate = _textureCoordinates[0] * (1 - beta - gamma) + _textureCoordinates[1] * beta + _textureCoordinates[2] * gamma;
-            
+
             // 处理纹理坐标分量大于1的情况（需使用纹理坐标寻址模式，参考：http://blog.csdn.net/soief/article/details/5714912）
             for (unsigned i = 0; i < 2; i++)
             {
@@ -56,8 +69,7 @@ float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
                 }
             }
 
-            cv::Mat textureImage = cv::imread(textureFileName());
-            cv::Vec3b rgb = textureImage.at<cv::Vec3b>(int(textureCoordinate.y * (textureImage.rows-1)), int(textureCoordinate.x * (textureImage.cols-1)));
+            cv::Vec3b rgb = texture()->at<cv::Vec3b>(int(textureCoordinate.y * (texture()->rows-1)), int(textureCoordinate.x * (texture()->cols-1)));
             for (unsigned i = 0; i < 3; i++)
             {
                 color.val[i] = (float)rgb[2 - i] / 255;
