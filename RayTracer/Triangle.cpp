@@ -40,6 +40,7 @@ void Triangle::setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2
     _textureCoordinates[2] = textureCoordinate2;
 }
 
+
 float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     Vec3f s = _vertices[0] - ray.origin();

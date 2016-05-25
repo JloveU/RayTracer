@@ -26,47 +26,53 @@ int main()
 //     scene.addAxes();
     // 添加地面（无限平面）
 //     scene.addGeometry(new Plane(Vec3f(0.0, -4.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.6, 0.6, 0.6), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0));
-    std::string textureFileName("./Textures/texture2.png");
-    std::string textureKey("ground_texture");
-    TexturePool::instance().add(textureKey, textureFileName);
-    const shared_ptr<Triangle> triangle1(new Triangle(Vec3f(-30.0, 0.0, 30.0), Vec3f(30.0, -0.0, 30.0), Vec3f(30.0, 0.0, -30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
-    triangle1->setTexture(textureKey);
-    triangle1->setTextureCoordinates(Vec2f(0.0, 0.0), Vec2f(10.0, 0.0), Vec2f(10.0, 10.0));
-    scene.addGeometry(triangle1);
-    const shared_ptr<Triangle> triangle2(new Triangle(Vec3f(30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, -30.0), Vec3f(-30.0, 0.0, 30.0), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
-    triangle2->setTexture(textureKey);
-    triangle2->setTextureCoordinates(Vec2f(10.0, 10.0), Vec2f(0.0, 10.0), Vec2f(0.0, 0.0));
-    scene.addGeometry(triangle2);
+    std::string groundTextureFileName("./Textures/texture2.png");
+    std::string groundTextureKey("ground_texture");
+    TexturePool::instance().add(groundTextureKey, groundTextureFileName);
+    float groundSize = 15;
+    const shared_ptr<Triangle> groundTriangle1(new Triangle(Vec3f(-groundSize, 0.0, groundSize), Vec3f(groundSize, -0.0, groundSize), Vec3f(groundSize, 0.0, -groundSize), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
+    groundTriangle1->setTexture(groundTextureKey);
+    groundTriangle1->setTextureCoordinates(Vec2f(0.0, 0.0), Vec2f(10.0, 0.0), Vec2f(10.0, 10.0));
+    scene.addGeometry(groundTriangle1);
+    const shared_ptr<Triangle> groundTriangle2(new Triangle(Vec3f(groundSize, 0.0, -groundSize), Vec3f(-groundSize, 0.0, -groundSize), Vec3f(-groundSize, 0.0, groundSize), Vec3f(0.4, 0.4, 0.4), Vec3f(0.0, 0.0, 0.0), 0.0, 0.0, 1.0));
+    groundTriangle2->setTexture(groundTextureKey);
+    groundTriangle2->setTextureCoordinates(Vec2f(10.0, 10.0), Vec2f(0.0, 10.0), Vec2f(0.0, 0.0));
+    scene.addGeometry(groundTriangle2);
     // 添加球体
-    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0, 0.0)));
-    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.6, 0.8)));
-    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.1, 0.6)));
-    // 添加三角形
-    scene.addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0)));
-    // 添加五边形（多边形）
-    const Vec3f _polygon1Vertices[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
-    const std::vector<Vec3f> polygon1Vertices(_polygon1Vertices, _polygon1Vertices + 5);
-    scene.addGeometry(shared_ptr<Polygon>(new Polygon(polygon1Vertices, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0)));
-    // 添加长方体
-    scene.addGeometry(shared_ptr<Box>(new Box(Vec3f(4.0, 5.0, -7.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2)));
-    // 添加四面体（组合几何图形）
-    shared_ptr<GeometryUnion> geometryUnion1(new GeometryUnion(Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
-    float geometryUnion1Size = 5;
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(1.0, 1.0, 0.0))));
-    geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
-    scene.addGeometry(geometryUnion1);
+    const shared_ptr<Sphere> sphere1(new Sphere(Vec3f(0.0, 4.0, 0.0),  4.0, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.5, 1.0, 0.0));
+    scene.addGeometry(sphere1);
+    const shared_ptr<Sphere> sphere2(new Sphere(Vec3f(8.0, 4.0, 0.0),  3.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.6, 0.8));
+    scene.addGeometry(sphere2);
+//     const shared_ptr<Sphere> sphere3(new Sphere(Vec3f(-7.0, 4.0, 0.0), 3.0, Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.1, 0.6));
+//     scene.addGeometry(sphere3);
+//     // 添加三角形
+//     const shared_ptr<Triangle> triangle1(new Triangle(Vec3f(-3.0, 2.0, -9.0), Vec3f(3.0, 2.0, -9.0), Vec3f(0.0, 7.196, -9.0), Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+//     scene.addGeometry(triangle1);
+//     // 添加五边形（多边形）
+//     const Vec3f _polygon1Vertices[5] = {Vec3f(-7.0, 2.0, -4.0), Vec3f(-3.0, 2.0, -8.0), Vec3f(-3.0, 6.0, -8.0), Vec3f(-5.0, 10.0, -6.0), Vec3f(-7.0, 6.0, -4.0)};
+//     const std::vector<Vec3f> polygon1Vertices(_polygon1Vertices, _polygon1Vertices + 5);
+//     const shared_ptr<Polygon> polygon1(new Polygon(polygon1Vertices, Vec3f(1.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 1.0));
+//     scene.addGeometry(polygon1);
+//     // 添加长方体
+//     const shared_ptr<Box> box1(new Box(Vec3f(4.0, 5.0, -7.0), Vec3f(4.0, 2.0, 2.0), Vec3f(0.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+//     scene.addGeometry(box1);
+//     // 添加四面体（组合几何图形）
+//     shared_ptr<GeometryUnion> geometryUnion1(new GeometryUnion(Vec3f(1.0, 1.0, 0.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
+//     float geometryUnion1Size = 5;
+//     geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(1.0, 1.0, 0.0))));
+//     geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+//     geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0, 3.0, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(1.0, 1.0, 0.0))));
+//     geometryUnion1->addGeometry(shared_ptr<Triangle>(new Triangle(Vec3f(-8.0 + geometryUnion1Size, 3.0, 6.0), Vec3f(-8.0, 3.0 + geometryUnion1Size, 6.0), Vec3f(-8.0, 3.0, 6.0 + geometryUnion1Size), Vec3f(1.0, 1.0, 0.0))));
+//     scene.addGeometry(geometryUnion1);
 //     // 添加Mesh
 //     shared_ptr<Mesh> mesh1(new Mesh(Vec3f(0.0, 0.0, 1.0), Vec3f(0.0, 0.0, 0.0), 0.0, 0.2));
 //     mesh1->loadObj("Models/PAC-216/OBJ/PAC-216-wheel.obj");
 //     scene.addGeometry(mesh1);
     // 添加光源
-    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 0.0, 0.0, 0.0)));
-    scene.addGeometry(shared_ptr<Sphere>(new Sphere(Vec3f(-60.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 0.0, 0.0, 0.0)));
-
-    // 相机
-    Camera camera(Vec3f(0.0, 0.0, 40.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 40, 1, 1280, 720);
+    const shared_ptr<Sphere> light1(new Sphere(Vec3f(60.0, 120.0, 120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(1.0, 1.0, 1.0), 1.0, 0.0, 0.0));
+    scene.addGeometry(light1);
+    const shared_ptr<Sphere> light2(new Sphere(Vec3f(-120.0, 120.0, -120.0), 30.0, Vec3f(1.0, 1.0, 1.0), Vec3f(0.5, 0.5, 0.5), 1.0, 0.0, 0.0));
+    scene.addGeometry(light2);
 
     // 动画展示（不停地移动相机并且转动相机的朝向）
     // 动画中，场景中的所有几何体以及光源固定不动，只移动相机位置及指向
@@ -79,9 +85,15 @@ int main()
     float horizontalCircleAlpha = 0.0;
     float horizontalCircleSpeed = 3 * 3.14 / 180;
     float verticalCircleRadius = circleRadius;
-    float verticalCircleAlpha = 30 * 3.14 / 180;
+    float verticalCircleAlpha = 60 * 3.14 / 180;
     float verticalCircleSpeed = 2 * 3.14 / 180;
     bool verticalCircleSpeedPositive = true;
+    Camera camera(Vec3f(0.0, 0.0, 10.0), Vec3f(0.0, 0.0, -1.0), Vec3f(0.0, 1.0, 0.0), 40, 1, 1280, 720);  // 相机
+    camera.SetViewPoint(Vec3f(cameraMotionSphereCenter.x() + horizontalCircleRadius * sin(horizontalCircleAlpha) * cos(verticalCircleAlpha), cameraMotionSphereCenter.y() + verticalCircleRadius * sin(verticalCircleAlpha), cameraMotionSphereCenter.z() + horizontalCircleRadius * cos(horizontalCircleAlpha) * cos(verticalCircleAlpha)));
+    camera.SetViewDirection(cameraMotionSphereCenter - camera.viewPoint());
+    camera.SetHeadDirection(camera.viewDirection().cross(Vec3f(-cos(horizontalCircleAlpha), 0, sin(horizontalCircleAlpha))));
+    Mat4f sphere2RotateMatrix = formRotateMatrix(Vec3f(0, 1, 0), 3 * 3.14 / 180);
+    Mat4f light2RotateMatrix = formRotateMatrix(Vec3f(0, 1, 0), -2 * 3.14 / 180);
     std::stringstream videoFileNameStream;
     videoFileNameStream << "./RenderResults/animationTemp_" << time(0) << ".avi";
     std::string videoFileName(videoFileNameStream.str());
@@ -97,9 +109,13 @@ int main()
             verticalCircleSpeedPositive = !verticalCircleSpeedPositive;
         }
         verticalCircleAlpha += verticalCircleSpeedPositive ? verticalCircleSpeed : -verticalCircleSpeed;
-        camera.SetViewPoint(Vec3f(cameraMotionSphereCenter.x() + horizontalCircleRadius * sin(horizontalCircleAlpha) * cos(verticalCircleAlpha), cameraMotionSphereCenter.y() + verticalCircleRadius * sin(verticalCircleAlpha), cameraMotionSphereCenter.z() + horizontalCircleRadius * cos(horizontalCircleAlpha) * cos(verticalCircleAlpha)));
-        camera.SetViewDirection(cameraMotionSphereCenter - camera.viewPoint());
-        camera.SetHeadDirection(camera.viewDirection().cross(Vec3f(-cos(horizontalCircleAlpha), 0, sin(horizontalCircleAlpha))));
+        
+//         camera.SetViewPoint(Vec3f(cameraMotionSphereCenter.x() + horizontalCircleRadius * sin(horizontalCircleAlpha) * cos(verticalCircleAlpha), cameraMotionSphereCenter.y() + verticalCircleRadius * sin(verticalCircleAlpha), cameraMotionSphereCenter.z() + horizontalCircleRadius * cos(horizontalCircleAlpha) * cos(verticalCircleAlpha)));
+//         camera.SetViewDirection(cameraMotionSphereCenter - camera.viewPoint());
+//         camera.SetHeadDirection(camera.viewDirection().cross(Vec3f(-cos(horizontalCircleAlpha), 0, sin(horizontalCircleAlpha))));
+
+        sphere2->transform(sphere2RotateMatrix);
+        light2->transform(light2RotateMatrix);
 
         clock_t frameStartTime = clock();
         camera.render(scene);

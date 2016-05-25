@@ -42,6 +42,7 @@ Geometry::Geometry(const Vec3f &surfaceColor, const Vec3f &emissionColor, const 
     _diffuse = diffuse;
 }
 
+
 void Geometry::setTexture(const std::string &textureKey)
 {
     const shared_ptr<const cv::Mat> textureImage = TexturePool::instance().get(textureKey);
@@ -52,6 +53,12 @@ void Geometry::setTexture(const std::string &textureKey)
 
     _textureImage = textureImage;
 }
+
+
+void Geometry::transform(const Mat4f &t)
+{
+}
+
 
 Geometry::~Geometry()
 {

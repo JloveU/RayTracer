@@ -8,6 +8,7 @@ TexturePool::TexturePool()
 {
 }
 
+
 TexturePool & TexturePool::instance()
 {
     if (!_instance)
@@ -18,10 +19,12 @@ TexturePool & TexturePool::instance()
     return *_instance;
 }
 
+
 void TexturePool::add(const std::string &key, const std::string &imageFileName)
 {
     add(key, cv::imread(imageFileName));
 }
+
 
 void TexturePool::add(const std::string &key, const cv::Mat &image)
 {
@@ -29,6 +32,7 @@ void TexturePool::add(const std::string &key, const cv::Mat &image)
     image.copyTo(*_image);
     _textureImages[key] = _image;
 }
+
 
 const shared_ptr<const cv::Mat> TexturePool::get(const std::string &key) const
 {

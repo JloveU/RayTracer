@@ -29,6 +29,8 @@ public:
         return _radius2;
     }
 
+    virtual void transform(const Mat4f &t);
+
     virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
 
 private:

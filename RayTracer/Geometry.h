@@ -62,6 +62,10 @@ public:
         return _textureImage;
     }
 
+    // 空间变换，用于对几何图形进行旋转、平移等变换
+    // t: 变换矩阵
+    virtual void transform(const Mat4f &t);
+
     // 计算光线和该物体的第1个交点
     // ray: (输入)光线
     // normal: (输出)交点处的单位法向量(指向几何体外侧或正向)，若无交点则不改变输入的normal
