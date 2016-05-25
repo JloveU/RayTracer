@@ -3,7 +3,7 @@
 
 
 #include <opencv.hpp>
-#include "Vector.h"
+#include "Matrix.h"
 #include "Scene.h"
 
 
@@ -61,12 +61,12 @@ public:
 
     void SetViewDirection(const Vec3f &viewDirection)
     {
-        _viewDirection = viewDirection * (1.0 / viewDirection.length());
+        _viewDirection = viewDirection * (1.0 / viewDirection.norm());
     }
 
     void SetHeadDirection(const Vec3f &headDirection)
     {
-        _headDirection = headDirection * (1.0 / headDirection.length());
+        _headDirection = headDirection * (1.0 / headDirection.norm());
     }
 
     void SetVerticalFOV(const float verticalFOV)

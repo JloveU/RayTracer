@@ -43,10 +43,10 @@ void Triangle::setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2
 float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     Vec3f s = _vertices[0] - ray.origin();
-    float inv = (float)1 / Vec3f::det(ray.direction(), _edge1, _edge2);
-    float t = Vec3f::det(s, _edge1, _edge2) * inv;
-    float beta = Vec3f::det(ray.direction(), s, _edge2) * inv;
-    float gamma = Vec3f::det(ray.direction(), _edge1, s) * inv;
+    float inv = (float)1 / det(ray.direction(), _edge1, _edge2);
+    float t = det(s, _edge1, _edge2) * inv;
+    float beta = det(ray.direction(), s, _edge2) * inv;
+    float gamma = det(ray.direction(), _edge1, s) * inv;
     if (t > 0 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1 && beta + gamma <= 1)
     {
         normal = _normal;
@@ -58,21 +58,21 @@ float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
             // 处理纹理坐标分量大于1的情况（需使用纹理坐标寻址模式，参考：http://blog.csdn.net/soief/article/details/5714912）
             for (unsigned i = 0; i < 2; i++)
             {
-                if (textureCoordinate.val[i] < 0.0)
+                if (textureCoordinate[i] < 0.0)
                 {
-                    textureCoordinate.val[i] = 0.0;
+                    textureCoordinate[i] = 0.0;
                 }
-                if (textureCoordinate.val[i] > 1.0)
+                if (textureCoordinate[i] > 1.0)
                 {
                     // Wrapping纹理寻址模式
-                    textureCoordinate.val[i] = textureCoordinate.val[i] - int(textureCoordinate.val[i]);
+                    textureCoordinate[i] = textureCoordinate[i] - int(textureCoordinate[i]);
                 }
             }
 
-            cv::Vec3b rgb = texture()->at<cv::Vec3b>(int(textureCoordinate.y * (texture()->rows-1)), int(textureCoordinate.x * (texture()->cols-1)));
+            cv::Vec3b rgb = texture()->at<cv::Vec3b>(int(textureCoordinate.y() * (texture()->rows-1)), int(textureCoordinate.x() * (texture()->cols-1)));
             for (unsigned i = 0; i < 3; i++)
             {
-                color.val[i] = (float)rgb[2 - i] / 255;
+                color[i] = (float)rgb[2 - i] / 255;
             }
         }
         else  // 若无纹理，则直接返回表面颜色

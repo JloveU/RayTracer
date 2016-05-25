@@ -4,7 +4,7 @@
 
 #include <string>
 #include <opencv.hpp>
-#include "Vector.h"
+#include "Matrix.h"
 #include "Ray.h"
 #include "TexturePool.h"
 #include "shared_ptr.h"
@@ -47,7 +47,7 @@ public:
 
     inline bool isLight() const
     {
-        return _emissionColor.x > 0 || _emissionColor.y > 0 || _emissionColor.z > 0;
+        return _emissionColor.x() > 0 || _emissionColor.y() > 0 || _emissionColor.z() > 0;
     }
 
     void setTexture(const std::string &textureKey);

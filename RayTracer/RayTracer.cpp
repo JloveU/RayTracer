@@ -4,7 +4,7 @@
 #include <string>
 #include <opencv.hpp>
 #include <time.h>
-#include "Vector.h"
+#include "Matrix.h"
 #include "Scene.h"
 #include "Camera.h"
 #include "Sphere.h"
@@ -97,7 +97,7 @@ int main()
             verticalCircleSpeedPositive = !verticalCircleSpeedPositive;
         }
         verticalCircleAlpha += verticalCircleSpeedPositive ? verticalCircleSpeed : -verticalCircleSpeed;
-        camera.SetViewPoint(Vec3f(cameraMotionSphereCenter.x + horizontalCircleRadius * sin(horizontalCircleAlpha) * cos(verticalCircleAlpha), cameraMotionSphereCenter.y + verticalCircleRadius * sin(verticalCircleAlpha), cameraMotionSphereCenter.z + horizontalCircleRadius * cos(horizontalCircleAlpha) * cos(verticalCircleAlpha)));
+        camera.SetViewPoint(Vec3f(cameraMotionSphereCenter.x() + horizontalCircleRadius * sin(horizontalCircleAlpha) * cos(verticalCircleAlpha), cameraMotionSphereCenter.y() + verticalCircleRadius * sin(verticalCircleAlpha), cameraMotionSphereCenter.z() + horizontalCircleRadius * cos(horizontalCircleAlpha) * cos(verticalCircleAlpha)));
         camera.SetViewDirection(cameraMotionSphereCenter - camera.viewPoint());
         camera.SetHeadDirection(camera.viewDirection().cross(Vec3f(-cos(horizontalCircleAlpha), 0, sin(horizontalCircleAlpha))));
 
@@ -106,7 +106,7 @@ int main()
         clock_t frameEndTime = clock();
         processEndTime = clock();
         frameCount++;
-        std::cout << "第 " << frameCount << " 帧渲染完毕，该帧用时 " << frameEndTime - frameStartTime << " ms，当前总用时 " << (processEndTime - processStartTime) / 1000 << " s。vAlpha:" << verticalCircleAlpha * 180 / 3.14 << ", hAlpha:" << horizontalCircleAlpha * 180 / 3.14 << ", x:" << camera.viewPoint().x << ", y:" << camera.viewPoint().y << ", z:" << camera.viewPoint().z << std::endl;
+        std::cout << "第 " << frameCount << " 帧渲染完毕，该帧用时 " << frameEndTime - frameStartTime << " ms，当前总用时 " << (processEndTime - processStartTime) / 1000 << " s。vAlpha:" << verticalCircleAlpha * 180 / 3.14 << ", hAlpha:" << horizontalCircleAlpha * 180 / 3.14 << ", x:" << camera.viewPoint().x() << ", y:" << camera.viewPoint().y() << ", z:" << camera.viewPoint().z() << std::endl;
 
         cv::imshow("Render result", camera.image());
 

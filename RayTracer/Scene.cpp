@@ -12,7 +12,7 @@ Scene::Scene(const Vec3f &backgroundColor)
     :_geometries()
 {
     // 颜色值必须大于等于0
-    if (backgroundColor.x < 0 || backgroundColor.y < 0 || backgroundColor.z < 0)
+    if (backgroundColor.x() < 0 || backgroundColor.y() < 0 || backgroundColor.z() < 0)
     {
         throw std::runtime_error("Value of color must not be under 0!");
     }

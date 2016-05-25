@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <stdexcept>
-#include "Vector.h"
+#include "Matrix.h"
 #include "Geometry.h"
 #include "Ray.h"
 #include "shared_ptr.h"

@@ -11,7 +11,7 @@ Plane::Plane(const Vec3f &point, const Vec3f &normal, const Vec3f &surfaceColor,
     ,_point(point)
 {
     // 法向量的长度必须大于0
-    if (normal.length2() == 0)
+    if (normal.norm() == 0)
     {
         throw std::runtime_error("Norm of normal must not be equal to 0!");
     }

@@ -13,7 +13,7 @@ Camera::Camera(const Vec3f &viewPoint, const Vec3f &viewDirection, const Vec3f &
     :_viewPoint(viewPoint)
 {
     // 方向向量的长度必须大于0
-    if (viewDirection.length2() == 0 || headDirection.length2() == 0)
+    if (viewDirection.norm() == 0 || headDirection.norm() == 0)
     {
         throw std::runtime_error("Norm of direction must not be equal to 0!");
     }
@@ -168,13 +168,13 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
                         if(geometries[j]->intersect(Ray(intersectionPoint + intersectionNormal * bias, lightDirection)) > 0)
                         {
                             // 若有几何图形遮挡并且该几何图形透明，则根据透明度计算透射系数
-                            transmission *= geometries[j]->surfaceColor() * geometries[j]->transparency();  // 因为不允许在透明几何图形上贴纹理，所以此处直接用几何图形的表面颜色属性
+                            transmission = (transmission.array() * geometries[j]->surfaceColor().array()).matrix() * geometries[j]->transparency();  // 因为不允许在透明几何图形上贴纹理，所以此处直接用几何图形的表面颜色属性
                         }
                     }
                 }                
 
                 // 如果光源在交点处的背面，则该光源在此处光照为0
-                surfaceColor += transmission * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometries[i]->emissionColor() * geometry->diffuse();
+                surfaceColor += (transmission.array() * geometries[i]->emissionColor().array()).matrix() * std::max(float(0), intersectionNormal.dot(lightDirection)) * geometry->diffuse();
             }
         }
 
@@ -182,7 +182,7 @@ Vec3f trace(const Ray &ray, const Scene &scene, const int depth)
 //         surfaceColor += scene.backgroundColor() * 0.2 * geometry->diffuse();
     }
 
-    return surfaceColor * intersectionColor + geometry->emissionColor();
+    return (surfaceColor.array() * intersectionColor.array()).matrix() + geometry->emissionColor();
 }
 
 
@@ -210,7 +210,7 @@ const cv::Mat & Camera::render(const Scene &scene)
             Vec3f pixel = trace(Ray(_viewPoint, pixelCoordinate - _viewPoint), scene, 0);
             for (unsigned i = 0; i < 3; i++)
             {
-                _image.at<cv::Vec3b>(row, col)[i] = (unsigned char)(std::min(float(1), pixel.val[2 - i]) * 255);
+                _image.at<cv::Vec3b>(row, col)[i] = (unsigned char)(std::min(float(1), pixel[2 - i]) * 255);
             }
         }
     }

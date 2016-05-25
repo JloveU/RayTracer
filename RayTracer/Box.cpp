@@ -12,7 +12,7 @@ Box::Box(const Vec3f &origin, const Vec3f &size, const Vec3f &surfaceColor, cons
     ,_origin(origin)
 {
     // ³ß´ç±ØÐë´óÓÚ0
-    if (size.x <= 0 || size.y <= 0 || size.z <= 0)
+    if (size.x() <= 0 || size.y() <= 0 || size.z() <= 0)
     {
         throw std::runtime_error("Size must not be under or equal to 0!");
     }
@@ -28,7 +28,7 @@ Box::Box(const Vec3f &origin, const Vec3f &size, const Vec3f &surfaceColor, cons
     {
         _slabs[i][0] = Plane(_origin, normals[i]);
         Vec3f pointOnFartherPlane = _origin;
-        pointOnFartherPlane.val[i] += _size.val[i];
+        pointOnFartherPlane[i] += _size[i];
         _slabs[i][1] = Plane(pointOnFartherPlane, normals[i]);
     }
 }

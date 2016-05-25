@@ -10,7 +10,7 @@ Ray::Ray(const Vec3f &origin, const Vec3f &direction)
     :_origin(origin)
 {
     // 方向向量的长度必须大于0
-    if (direction.length2() == 0)
+    if (direction.norm() == 0)
     {
         throw std::runtime_error("Norm of direction must not be equal to 0!");
     }

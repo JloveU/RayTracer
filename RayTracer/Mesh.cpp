@@ -4,7 +4,7 @@
 #include <fstream>
 #include <math.h>
 #include <stdlib.h>
-#include "Vector.h"
+#include "Matrix.h"
 #include "Triangle.h"
 #include "TexturePool.h"
 #include "shared_ptr.h"
@@ -151,10 +151,10 @@ int Mesh::loadObj(const std::string &fileName)
             for (unsigned i = 0; i < 3; i++)
             {
                 std::vector<std::string> bufferLineSplitSplit = stringSplit(bufferLineSplit[i + 1], "/");
-                faceVertices.val[i] = atoi(bufferLineSplitSplit[0].c_str());
+                faceVertices[i] = atoi(bufferLineSplitSplit[0].c_str());
             }
             facesVertices.push_back(faceVertices);
-            const shared_ptr<Triangle> triangle(new Triangle(vertices[faceVertices.val[0] - 1], vertices[faceVertices.val[1] - 1], vertices[faceVertices.val[2] - 1]));
+            const shared_ptr<Triangle> triangle(new Triangle(vertices[faceVertices[0] - 1], vertices[faceVertices[1] - 1], vertices[faceVertices[2] - 1]));
 
             if (stringSplit(bufferLineSplit[1], "/").size() > 1)  // ÓÐÎÆÀí×ø±ê
             {
@@ -162,11 +162,11 @@ int Mesh::loadObj(const std::string &fileName)
                 for (unsigned i = 0; i < 3; i++)
                 {
                     std::vector<std::string> bufferLineSplitSplit = stringSplit(bufferLineSplit[i + 1], "/");
-                    faceTextureCoordinates.val[i] = atoi(bufferLineSplitSplit[1].c_str());
+                    faceTextureCoordinates[i] = atoi(bufferLineSplitSplit[1].c_str());
                 }
                 facesTextureCoordinates.push_back(faceTextureCoordinates);
                 triangle->setTexture(textureKey);
-                triangle->setTextureCoordinates(textureCoordinates[faceTextureCoordinates.val[0] - 1], textureCoordinates[faceTextureCoordinates.val[1] - 1], textureCoordinates[faceTextureCoordinates.val[2] - 1]);
+                triangle->setTextureCoordinates(textureCoordinates[faceTextureCoordinates[0] - 1], textureCoordinates[faceTextureCoordinates[1] - 1], textureCoordinates[faceTextureCoordinates[2] - 1]);
             }
             addGeometry(triangle);
         }
@@ -176,58 +176,58 @@ int Mesh::loadObj(const std::string &fileName)
     int Pxmin, Pxmax, Pymin, Pymax, Pzmin, Pzmax;
 
     // calculate the bounding sphere
-    xmin = xmax = vertices[0].x;
-    ymin = ymax = vertices[0].y;
-    zmin = zmax = vertices[0].z;
+    xmin = xmax = vertices[0].x();
+    ymin = ymax = vertices[0].y();
+    zmin = zmax = vertices[0].z();
     Pxmin = Pxmax = Pymin = Pymax = Pzmin = Pzmax = 0;
 
     // calculate the bounding box
-    boundingBoxOrigin = Vec3f(vertices[0].x, vertices[0].y, vertices[0].z);
-    boundingBoxSize = Vec3f(vertices[0].x, vertices[0].y, vertices[0].z);
+    boundingBoxOrigin = Vec3f(vertices[0].x(), vertices[0].y(), vertices[0].z());
+    boundingBoxSize = Vec3f(vertices[0].x(), vertices[0].y(), vertices[0].z());
 
     for(unsigned i = 1; i < vertices.size(); i++)
     {
         // update min value
-        boundingBoxOrigin.x = std::min(vertices[i].x, boundingBoxOrigin.x);
-        boundingBoxOrigin.y = std::min(vertices[i].y, boundingBoxOrigin.y);
-        boundingBoxOrigin.z = std::min(vertices[i].z, boundingBoxOrigin.z);
+        boundingBoxOrigin.x() = std::min(vertices[i].x(), boundingBoxOrigin.x());
+        boundingBoxOrigin.y() = std::min(vertices[i].y(), boundingBoxOrigin.y());
+        boundingBoxOrigin.z() = std::min(vertices[i].z(), boundingBoxOrigin.z());
 
         // update max value
-        boundingBoxSize.x = std::max(vertices[i].x, boundingBoxSize.x);
-        boundingBoxSize.y = std::max(vertices[i].y, boundingBoxSize.y);
-        boundingBoxSize.z = std::max(vertices[i].z, boundingBoxSize.z);
+        boundingBoxSize.x() = std::max(vertices[i].x(), boundingBoxSize.x());
+        boundingBoxSize.y() = std::max(vertices[i].y(), boundingBoxSize.y());
+        boundingBoxSize.z() = std::max(vertices[i].z(), boundingBoxSize.z());
 
         // update the  x min and max
-        if (vertices[i].x < xmin)
+        if (vertices[i].x() < xmin)
         {
-            xmin = vertices[i].x;
+            xmin = vertices[i].x();
             Pxmin = i;
         }
-        else if(vertices[i].x > xmax)
+        else if(vertices[i].x() > xmax)
         {
-            xmax = vertices[i].x;
+            xmax = vertices[i].x();
             Pxmax = i;
         }
         // update the y min and max
-        if (vertices[i].y < ymin)
+        if (vertices[i].y() < ymin)
         {
-            ymin = vertices[i].y;
+            ymin = vertices[i].y();
             Pymin = i;
         }
-        else if(vertices[i].y > ymax)
+        else if(vertices[i].y() > ymax)
         {
-            ymax = vertices[i].y;
+            ymax = vertices[i].y();
             Pymax = i;
         }
         // update the z min and max
-        if(vertices[i].z < zmin)
+        if(vertices[i].z() < zmin)
         {
-            zmin = vertices[i].z;
+            zmin = vertices[i].z();
             Pzmin = i;
         }
-        else if(vertices[i].z > zmax)
+        else if(vertices[i].z() > zmax)
         {
-            zmax = vertices[i].z;
+            zmax = vertices[i].z();
             Pzmax = i;
         }
     }
@@ -236,49 +236,44 @@ int Mesh::loadObj(const std::string &fileName)
     Vec3f dVx = vertices[Pxmax] - vertices[Pxmin];
     Vec3f dVy = vertices[Pymax] - vertices[Pymin];
     Vec3f dVz = vertices[Pzmax] - vertices[Pzmin];
-    float dx2 = dVx.length2();
-    float dy2 = dVy.length2();
-    float dz2 = dVz.length2();
+    float dx = dVx.norm();
+    float dy = dVy.norm();
+    float dz = dVz.norm();
 
     Vec3f center;
-    float radius2;
     float radius;
 
-    if (dx2 >= dy2 && dx2>=dz2)  // x direction is largest extent
+    if (dx >= dy && dx>=dz)  // x direction is largest extent
     {
         center = vertices[Pxmin] + (dVx * 0.5);  // Center = midpoint of extremes
-        radius2 = (vertices[Pxmax] - center).length2();  // radius squared
+        radius = (vertices[Pxmax] - center).norm();  // radius squared
     }
-    else if (dy2 >= dx2  && dy2>=dz2)  // y direction is largest extent
+    else if (dy >= dx  && dy>=dz)  // y direction is largest extent
     {
         center = vertices[Pymin] + (dVy * 0.5);  // Center = midpoint of extremes
-        radius2 = (vertices[Pymax] - center).length2();  // radius squared
+        radius = (vertices[Pymax] - center).norm();  // radius squared
     }
     else
     {
         center = vertices[Pzmin] + (dVz * 0.5);  // Center = midpoint of extremes
-        radius2 = (vertices[Pzmax] - center).length2();  // radius squared
+        radius = (vertices[Pzmax] - center).norm();  // radius squared
     }
-
-    radius = sqrt(radius2);
 
     // now check that all points V[i] are in the ball
     // and if not, expand the ball just enough to include them
     Vec3f dV;
-    float dist2,dist;
+    float dist;
     for (unsigned i = 0; i < vertices.size(); i++)
     {
         dV = vertices[i] - center;
-        dist2 = dV.length2();
-        if (dist2 <= radius2)  // V[i] is inside the ball already
+        dist = dV.norm();
+        if (dist <= radius)  // V[i] is inside the ball already
         {
             continue;
         }
 
         // V[i] not in ball, so expand ball to include it
-        dist = sqrt(dist2);
         radius = (radius + dist) / 2.0;  // enlarge radius just enough
-        radius2 = radius * radius;
         center = center + dV * ((dist-radius)/dist);  // shift Center toward V[i]
     }
 
@@ -289,9 +284,9 @@ int Mesh::loadObj(const std::string &fileName)
     std::cout << "number of faces:" << facesVertices.size() << std::endl;
     std::cout << "number of vertices:" << vertices.size() << std::endl;
     std::cout << "obj bounding box: min:("
-        << boundingBoxOrigin.x << "," << boundingBoxOrigin.y << "," << boundingBoxOrigin.z << ") max:("
-        << boundingBoxSize.x << "," << boundingBoxSize.y << "," << boundingBoxSize.z << ")" << std::endl
-        << "obj bounding sphere center:" << boundingSphereCenter.x << "," << boundingSphereCenter.y << "," << boundingSphereCenter.z << std::endl
+        << boundingBoxOrigin.x() << "," << boundingBoxOrigin.y() << "," << boundingBoxOrigin.z() << ") max:("
+        << boundingBoxSize.x() << "," << boundingBoxSize.y() << "," << boundingBoxSize.z() << ")" << std::endl
+        << "obj bounding sphere center:" << boundingSphereCenter.x() << "," << boundingSphereCenter.y() << "," << boundingSphereCenter.z() << std::endl
         << "obj bounding sphere radius:" << boundingSphereRadius << std::endl;
 
     return 0;

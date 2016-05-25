@@ -45,28 +45,28 @@ float Polygon::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         // 将所有顶点投影到二维平面（同时将坐标原点平移到该多边形所在平面与光线的交点处）
         Vec3f intersectionPoint = ray.pointAt(t);  // 多边形所在平面与光线的交点
         std::vector<Vec2f> vertices2D(_vertices.size());
-        if (_normal.x != 0 && _normal.y == 0 && _normal.z == 0)  // 如果该多边形所在平面平行于yz平面，则直接去掉所有顶点的x分量
+        if (_normal.x() != 0 && _normal.y() == 0 && _normal.z() == 0)  // 如果该多边形所在平面平行于yz平面，则直接去掉所有顶点的x分量
         {
             for (unsigned i = 0; i < _vertices.size(); i++)
             {
-                vertices2D[i].x = _vertices[i].y - intersectionPoint.y;
-                vertices2D[i].y = _vertices[i].z - intersectionPoint.z;
+                vertices2D[i].x() = _vertices[i].y() - intersectionPoint.y();
+                vertices2D[i].y() = _vertices[i].z() - intersectionPoint.z();
             }
         }
-        else if (_normal.x == 0 && _normal.y != 0 && _normal.z == 0)  // 如果该多边形所在平面平行于xz平面，则直接去掉所有顶点的y分量
+        else if (_normal.x() == 0 && _normal.y() != 0 && _normal.z() == 0)  // 如果该多边形所在平面平行于xz平面，则直接去掉所有顶点的y分量
         {
             for (unsigned i = 0; i < _vertices.size(); i++)
             {
-                vertices2D[i].x = _vertices[i].x - intersectionPoint.x;
-                vertices2D[i].y = _vertices[i].z - intersectionPoint.z;
+                vertices2D[i].x() = _vertices[i].x() - intersectionPoint.x();
+                vertices2D[i].y() = _vertices[i].z() - intersectionPoint.z();
             }
         }
         else  // 如果该多边形所在平面平行于xy平面，或以上情况均不满足，则将所有顶点投影至xy平面，即直接去掉所有顶点的z分量
         {
             for (unsigned i = 0; i < _vertices.size(); i++)
             {
-                vertices2D[i].x = _vertices[i].x - intersectionPoint.x;
-                vertices2D[i].y = _vertices[i].y - intersectionPoint.y;
+                vertices2D[i].x() = _vertices[i].x() - intersectionPoint.x();
+                vertices2D[i].y() = _vertices[i].y() - intersectionPoint.y();
             }
         }
 
@@ -77,31 +77,31 @@ float Polygon::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
         {
             Vec2f &v1 = vertices2D[i];
             Vec2f &v2 = vertices2D[j];
-            if (v1.y * v2.y < 0)  // 如果两端点的y坐标均非0，且符号相同，则这条边与 X 轴正半轴无交点
+            if (v1.y() * v2.y() < 0)  // 如果两端点的y坐标均非0，且符号相同，则这条边与 X 轴正半轴无交点
             {
-                if (v1.x - v1.y * (v2.x-v1.x) / (v2.y-v1.y) > 0)  // 如果该边与x轴正半轴有交点
+                if (v1.x() - v1.y() * (v2.x()-v1.x()) / (v2.y()-v1.y()) > 0)  // 如果该边与x轴正半轴有交点
                 {
                     crossCount++;
                 }
             }
-//             else if (v1.y == 0)  // 如果该边的其中一个端点落在x轴上，则根据另一端点的y坐标判断，若正则计相交0.5次，若负则计相交-0.5次（TODO 实际运行好像不需要这种情况的判断，不知为何）
+//             else if (v1.y() == 0)  // 如果该边的其中一个端点落在x轴上，则根据另一端点的y坐标判断，若正则计相交0.5次，若负则计相交-0.5次（TODO 实际运行好像不需要这种情况的判断，不知为何）
 //             {
-//                 if (v2.y > 0)
+//                 if (v2.y() > 0)
 //                 {
 //                     crossCount += 0.5;
 //                 } 
-//                 else if (v2.y < 0)
+//                 else if (v2.y() < 0)
 //                 {
 //                     crossCount -= 0.5;
 //                 }
 //             }
-//             else if (v2.y == 0)  // 同上
+//             else if (v2.y() == 0)  // 同上
 //             {
-//                 if (v1.y > 0)
+//                 if (v1.y() > 0)
 //                 {
 //                     crossCount += 0.5;
 //                 } 
-//                 else if (v1.y < 0)
+//                 else if (v1.y() < 0)
 //                 {
 //                     crossCount -= 0.5;
 //                 }

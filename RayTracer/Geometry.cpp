@@ -12,7 +12,7 @@ const float Geometry::_defaultDiffuse = 1.0;
 Geometry::Geometry(const Vec3f &surfaceColor, const Vec3f &emissionColor, const float transparency, const float specular, const float diffuse)
 {
     // 颜色值必须大于等于0
-    if (surfaceColor.x < 0 || surfaceColor.y < 0 || surfaceColor.z < 0 || emissionColor.x < 0 || emissionColor.y < 0 || emissionColor.z < 0)
+    if (surfaceColor.x() < 0 || surfaceColor.y() < 0 || surfaceColor.z() < 0 || emissionColor.x() < 0 || emissionColor.y() < 0 || emissionColor.z() < 0)
     {
         throw std::runtime_error("Value of color must not be under 0!");
     }
