@@ -19,6 +19,8 @@ public:
     // 正确读取完毕返回0，出错返回-1
     int loadObj(const std::string &filename);
 
+    virtual void transform(const Mat4f &t);
+
 };
 
 

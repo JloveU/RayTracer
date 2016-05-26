@@ -26,12 +26,7 @@ Sphere::Sphere(const Vec3f &center, const float radius, const Vec3f &surfaceColo
 
 void Sphere::transform(const Mat4f &t)
 {
-    Vec4f centerAugmented(_center.x(), _center.y(), _center.z(), 1);
-    Vec4f centerAugmentedTransformed = t * centerAugmented;
-    for (unsigned i = 0; i < 3; i++)
-    {
-        _center[i] = centerAugmentedTransformed[i] / centerAugmentedTransformed[3];
-    }
+    Matrix::transform(_center, t);
 }
 
 

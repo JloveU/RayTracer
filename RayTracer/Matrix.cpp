@@ -2,13 +2,13 @@
 #include <math.h>
 
 
-float det(const Vec3f &v1, const Vec3f &v2, const Vec3f &v3)
+float Matrix::det(const Vec3f &v1, const Vec3f &v2, const Vec3f &v3)
 {
     return v1.x() * (v2.y()*v3.z()-v2.z()*v3.y()) - v1.y() * (v2.x()*v3.z()-v2.z()*v3.x()) + v1.z() * (v2.x()*v3.y()-v2.y()*v3.x());
 }
 
 
-Mat4f formRotateMatrix(const Vec3f &axis, const float angle)
+Mat4f Matrix::formRotateMatrix(const Vec3f &axis, const float angle)
 {
     Vec3f axisNormalized = axis.normalized();
     float x = axisNormalized.x();
@@ -25,4 +25,14 @@ Mat4f formRotateMatrix(const Vec3f &axis, const float angle)
         0,                       0,                       0,                       1;
 
     return rotateMatrix;
+}
+
+void Matrix::transform(Vec3f &vector, const Mat4f &t)
+{
+    Vec4f vectorAugmented(vector.x(), vector.y(), vector.z(), 1);
+    Vec4f vectorAugmentedTransformed = t * vectorAugmented;
+    for (unsigned i = 0; i < 3; i++)
+    {
+        vector[i] = vectorAugmentedTransformed[i] / vectorAugmentedTransformed[3];
+    }
 }

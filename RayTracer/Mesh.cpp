@@ -291,3 +291,12 @@ int Mesh::loadObj(const std::string &fileName)
 
     return 0;
 }
+
+
+void Mesh::transform(const Mat4f &t)
+{
+    for (std::vector<const shared_ptr<Geometry> >::iterator iter = _geometries.begin(); iter != _geometries.end(); iter++)
+    {
+        (*iter)->transform(t);
+    }
+}

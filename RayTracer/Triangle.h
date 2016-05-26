@@ -39,7 +39,13 @@ public:
 
     void setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2f &textureCoordinate1, const Vec2f &textureCoordinate2);
 
+    virtual void transform(const Mat4f &t);
+
     virtual float intersect(const Ray &ray, Vec3f &normal=Vec3f(), Vec3f &color=Vec3f()) const;
+
+private:
+    // 根据三个顶点更新计算其他成员变量
+    void updateCache();
 
 private:
     Vec3f _vertices[3];  // 三角形的3个顶点（按逆时针方向确定正面）

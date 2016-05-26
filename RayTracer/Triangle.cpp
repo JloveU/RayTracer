@@ -19,9 +19,17 @@ Triangle::Triangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vert
     _vertices[1] = vertex1;
     _vertices[2] = vertex2;
 
-    // 计算两条边和单位法向量
+    updateCache();
+}
+
+
+void Triangle::updateCache()
+{
+    // 计算两条边
     _edge1 = _vertices[0] - _vertices[1];
     _edge2 = _vertices[0] - _vertices[2];
+
+    // 计算单位法向量
     _normal = _edge1.cross(_edge2);
     _normal.normalize();
 }
@@ -41,13 +49,24 @@ void Triangle::setTextureCoordinates(const Vec2f &textureCoordinate0, const Vec2
 }
 
 
+void Triangle::transform(const Mat4f &t)
+{
+    for (unsigned i = 0; i < 3; i++)
+    {
+        Matrix::transform(_vertices[i], t);
+    }
+
+    updateCache();
+}
+
+
 float Triangle::intersect(const Ray &ray, Vec3f &normal, Vec3f &color) const
 {
     Vec3f s = _vertices[0] - ray.origin();
-    float inv = (float)1 / det(ray.direction(), _edge1, _edge2);
-    float t = det(s, _edge1, _edge2) * inv;
-    float beta = det(ray.direction(), s, _edge2) * inv;
-    float gamma = det(ray.direction(), _edge1, s) * inv;
+    float inv = (float)1 / Matrix::det(ray.direction(), _edge1, _edge2);
+    float t = Matrix::det(s, _edge1, _edge2) * inv;
+    float beta = Matrix::det(ray.direction(), s, _edge2) * inv;
+    float gamma = Matrix::det(ray.direction(), _edge1, s) * inv;
     if (t > 0 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1 && beta + gamma <= 1)
     {
         normal = _normal;
