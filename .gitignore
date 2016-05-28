@@ -245,7 +245,3 @@ _Pvt_Extensions
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-# Output images - by YU Qiang
-/RayTracer/Models/*
-/RayTracer/RenderResults/*
